@@ -62,6 +62,13 @@ public class View extends JFrame implements Observer {
 		
 		//jcbFrom.addItemListener(new Controller(model));
 		
+		for (int i = 1990; i < 2018; i++) {
+			
+			jcbFrom.addItem(i + "");
+			jcbTo.addItem(i + "");
+			
+		}
+	
 		String s = (String)jcbFrom.getSelectedItem();
 		System.out.println(s);
 		
@@ -70,13 +77,6 @@ public class View extends JFrame implements Observer {
 		
 		Ripley ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
 		JLabel jlInfo = new JLabel(ripley.getLastUpdated(), SwingConstants.CENTER);
-		
-		 for (int i = ripley.getStartYear(); i < ripley.getLatestYear(); i++) {		
-				
-				jcbFrom.addItem(i + "");
-				jcbTo.addItem(i + "");
-				
-			}
 		
 		JLabel jlWelcome = new JLabel("<html>Welcome to the Ripley API v" + ripley.getVersion() +
 				"<br>Please select from the dates above, in order to begin analysing UFO sighting data<html>",
