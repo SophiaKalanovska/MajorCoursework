@@ -16,17 +16,35 @@ import javax.swing.SwingConstants;
 
 import welcome.Controller;
 import welcome.Model;
-
+import welcome.WelcomePanel;
 import api.ripley.Ripley;
 
 
 public class View extends JFrame implements Observer {
 	
-	//Model model = new Model();
+	private static JComboBox<String> jcbFrom;
+	private static JComboBox<String> jcbTo;
+	private static JLabel jlFrom;
+	JLabel jlTo;
+	JButton jbLeft;
+	JButton jbRight;
+	JPanel jpCombBox;
+	JPanel jpBottom;
+	JLabel jlInfo;
+	JPanel jpNorth;
+	JPanel jpCenter;
+	
+	
+	Ripley ripley;
+	
+	Model model = new Model();
 
 	public View() {
 		
 		super();
+		
+		ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//need to set some sort of layout manager
 		setPreferredSize(new Dimension(800, 600));
@@ -42,15 +60,14 @@ public class View extends JFrame implements Observer {
 	
 	public void initWidgets() {
 		//add assignments (and adding) of JPanels here
-		//String[] dates = {"2016", "2017"};
 		
-		JComboBox<String> jcbFrom = new JComboBox();
-		JComboBox<String> jcbTo = new JComboBox();
-		JLabel jlFrom = new JLabel("From:");
-		JLabel jlTo = new JLabel("To:");
+		jcbFrom = new JComboBox<String>();
+		jcbTo = new JComboBox<String>();
+		jlFrom = new JLabel("From:");
+		jlTo = new JLabel("To:");
 		
-		JButton jbLeft = new JButton("<");
-		JButton jbRight = new JButton(">");
+		jbLeft = new JButton("<");
+		jbRight = new JButton(">");
 		jbLeft.setEnabled(false);
 		jbRight.setEnabled(false);
 		
@@ -60,16 +77,15 @@ public class View extends JFrame implements Observer {
 		jcbFrom.setSelectedItem("--");
 		jcbTo.setSelectedItem("--");
 		
-		//jcbFrom.addItemListener(new Controller(model));
+		jcbFrom.addItemListener(new Controller(model));
 		
 		String s = (String)jcbFrom.getSelectedItem();
 		System.out.println(s);
 		
-		JPanel jpCombBox = new JPanel(new FlowLayout());
-		JPanel jpBottom = new JPanel(new BorderLayout());
+		jpCombBox = new JPanel(new FlowLayout());
+		jpBottom = new JPanel(new BorderLayout());
 		
-		Ripley ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
-		JLabel jlInfo = new JLabel(ripley.getLastUpdated(), SwingConstants.CENTER);
+		jlInfo = new JLabel(ripley.getLastUpdated(), SwingConstants.CENTER);
 		
 		 for (int i = ripley.getStartYear(); i < ripley.getLatestYear(); i++) {		
 				
@@ -78,9 +94,6 @@ public class View extends JFrame implements Observer {
 				
 			}
 		
-		JLabel jlWelcome = new JLabel("<html>Welcome to the Ripley API v" + ripley.getVersion() +
-				"<br>Please select from the dates above, in order to begin analysing UFO sighting data<html>",
-				SwingConstants.CENTER);
 		
 		
 		jpCombBox.add(jlFrom);
@@ -93,10 +106,17 @@ public class View extends JFrame implements Observer {
 		jpBottom.add(jlInfo, BorderLayout.CENTER);
 		
 		
-		JPanel jpNorth = new JPanel(new BorderLayout());
-		JPanel jpCenter = new JPanel();
+		jpNorth = new JPanel(new BorderLayout());
+		jpCenter = new JPanel(new BorderLayout());
 		
-		jpCenter.add(jlWelcome);
+		
+		JLabel jlWelcome = new JLabel("<html>Welcome to the Ripley API v" + ripley.getVersion() +
+				"<br>Please select from the dates above, in order to begin analysing UFO sighting data<html>",
+				SwingConstants.CENTER);		
+		
+		JPanel welcome = new WelcomePanel();
+		
+		jpCenter.add(welcome, BorderLayout.CENTER);
 		
 		this.setLayout(new BorderLayout());
 		
@@ -110,32 +130,33 @@ public class View extends JFrame implements Observer {
 	
 	public void update(Observable arg0, Object arg1) {
 		
-	/*	Model model = (Model) arg0;
+		Model model = (Model) arg0;
 		
 		Controller controller = new Controller(model);
 		
-		if (arg1.equals("Hello")) {
-			
-			
+		if (arg1.equals("Test")) {
+
 			System.out.println("ca");
 			
-		}*/
+		}
 	}
 	
 	public static void main (String[] args) {
 		
 		View view = new View();
 		
-		//Model model = new Model();
+		JPanel welcome = new WelcomePanel();
 		
-		//Controller controller = new Controller(model);
+		Model model = new Model();
+		
+		
+		Controller controller = new Controller(model);
 		
 		view.display();
 		
-		//model.addObserver(view);
+		model.addObserver(view);
+		model.addObserver((Observer) welcome);
 		
-		//Ripley ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
-		//System.out.println(ripley.getLastUpdated());
 	}
 
 	

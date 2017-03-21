@@ -20,7 +20,7 @@ public class Controller implements ItemListener {
 			
 	          Object item = event.getItem();
 	          System.out.println(event);
-	          model.inform();
+	          model.test();
 	          // do something with object
 	       }
 	}       

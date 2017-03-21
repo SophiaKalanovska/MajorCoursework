@@ -15,7 +15,16 @@ public class Model extends Observable {
 		
 		System.out.println("va");
 		setChanged();
-		notifyObservers("Hello");
+		notifyObservers("Test");
+		
+	}
+	
+	public void test() {
+		
+		System.out.println("test");
+		
+		setChanged();
+		notifyObservers("Test");
 		
 	}
 	
