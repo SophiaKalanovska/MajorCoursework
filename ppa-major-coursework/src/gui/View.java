@@ -36,16 +36,20 @@ public class View extends JFrame implements Observer {
 	JPanel jpNorth;
 	JPanel jpCenter;
 	
+	WelcomePanel welcome;
+	
+	boolean isDataReady;
+	
 	Ripley ripley;
 
-	Controller controller;
+	//Controller controller;
 	
 	
-	public View(Controller controller) {
+	public View() {
 		
 		super();
 		
-		this.controller = controller;
+		//this.controller = controller;
 		
 		ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
 		
@@ -55,6 +59,9 @@ public class View extends JFrame implements Observer {
 		setPreferredSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
+		
+		isDataReady = false;
+		
 		initWidgets();
 		
 	}
@@ -66,7 +73,11 @@ public class View extends JFrame implements Observer {
 	public void initWidgets() {
 		//add assignments (and adding) of JPanels here
 		
+		welcome = new WelcomePanel();
+		
 		Model model = new Model();
+		//model.addObserver(welcome);
+		model.addObserver(this);
 		
 		jcbFrom = new JComboBox<String>();
 		jcbTo = new JComboBox<String>();
@@ -81,21 +92,23 @@ public class View extends JFrame implements Observer {
 		jcbFrom.addItem("--");
 		jcbTo.addItem("--");
 		
-		jcbFrom.setSelectedItem("--");
-		jcbTo.setSelectedItem("--");
+		//jcbFrom.setSelectedItem("2010");
+		//jcbTo.setSelectedItem("--");
+		Controller controller = new Controller(model);
 		
-		jcbFrom.addItemListener(new Controller(model));
-		jcbTo.addItemListener(new Controller(model));
+		jcbFrom.addItemListener(controller);
+		jcbTo.addItemListener(controller);
 		
 		String s = (String)jcbFrom.getSelectedItem();
 		System.out.println(s);
+		
 		
 		jpCombBox = new JPanel(new FlowLayout());
 		jpBottom = new JPanel(new BorderLayout());
 		
 		JLabel jlInfo = new JLabel(ripley.getLastUpdated(), SwingConstants.CENTER);
 		
-		 for (int i = ripley.getStartYear(); i < ripley.getLatestYear(); i++) {		
+		 for (int i = ripley.getStartYear(); i <= ripley.getLatestYear(); i++) {		
 				
 				jcbFrom.addItem(i + "");
 				jcbTo.addItem(i + "");
@@ -120,7 +133,7 @@ public class View extends JFrame implements Observer {
 		jpNorth = new JPanel(new BorderLayout());
 		jpCenter = new JPanel();
 		
-		WelcomePanel welcome = new WelcomePanel();
+		//WelcomePanel welcome = new WelcomePanel();
 		jpCenter.add(welcome);
 		
 		this.setLayout(new BorderLayout());
@@ -133,23 +146,65 @@ public class View extends JFrame implements Observer {
 		
 	}
 	
-	public void update(Observable arg0, Object arg1) {
+	public String getJcbFrom() {
 		
-		System.out.println("bon peut etre");
+		String jcbFromValue = (String)jcbFrom.getSelectedItem();
+		System.out.println("jcbFrom: " + jcbFromValue);
+		return jcbFromValue;
+			
+	}
+	
+	public String getJcbTo() {
+		
+		String jcbToValue = (String)jcbTo.getSelectedItem();
+		System.out.println("jcbTo: " + jcbToValue);
+		return jcbToValue;
+		
+	}
+	
+	public void updateWelcomePanel(String from, String to) {
+		
+		welcome.addToDisplay(from, to); 
+		
+		
+	}
+	
+	public void grabData(String from, String to) {
+		
+		System.out.println("hello");
+		welcome.grabData(from, to);
+		
+	}
+	
+	public void update(Observable arg0, Object arg1) {
 		
 		Model model = (Model) arg0;
 		
-		Controller controller = new Controller(model);
+	//	Controller controller = new Controller(model);
 		
-		if (arg1.equals("Hello")) {
+		if (arg1.equals("Test 2")) {
+			
+			getJcbFrom();
+			getJcbTo();
+			updateWelcomePanel(getJcbFrom(), getJcbTo());
+
+			
+		//	grabData(getJcbFrom(), getJcbTo());
+			
+			System.out.println("Update View");
+			isDataReady = true;
+			model.dataGrabbing();
 					
-			System.out.println("ca");
+		}
+		
+		if (arg1.equals("Grab Data")) {
+			
+			System.out.println("pute");
+			grabData(getJcbFrom(), getJcbTo());
 			
 		}
-	 else {
 		
-		System.out.println("c'est dejà ça");
-	 }
+		
 		
 	}
 	

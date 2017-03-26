@@ -11,13 +11,18 @@ public class Main {
 	
 	public static void main (String[] args) {		
 		
+		WelcomePanel welcome = new WelcomePanel();
+				
 		Model model = new Model();
+		
+		View view = new View();
 		
 		Controller controller = new Controller(model);
 		
-		View view = new View(controller);
+	
+		//View view = new View(controller);
 		
-	//	model.addObserver(view);
+	    //model.addObserver(view);
 
 		view.display();
 		
