@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,9 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import welcome.Controller;
+import welcome.GrabListener;
 import welcome.Model;
 import welcome.WelcomePanel;
 import api.ripley.Ripley;
+import controller.LeftListener;
+import controller.RightListener;
 
 
 public class View extends JFrame implements Observer {
@@ -36,9 +40,13 @@ public class View extends JFrame implements Observer {
 	JPanel jpNorth;
 	JPanel jpCenter;
 	
-	WelcomePanel welcome;
+	Model model;
 	
-	boolean isDataReady;
+	WelcomePanel welcome;
+
+	ArrayList<JPanel> panelList = new ArrayList<JPanel>();
+	JPanel currentPanel;
+	int index;
 	
 	Ripley ripley;
 
@@ -60,8 +68,12 @@ public class View extends JFrame implements Observer {
 		pack();
 		setLocationRelativeTo(null);
 		
-		isDataReady = false;
+        welcome = new WelcomePanel();
 		
+		model = new Model();
+		model.addObserver(this);
+		
+		index = 0;
 		initWidgets();
 		
 	}
@@ -72,12 +84,6 @@ public class View extends JFrame implements Observer {
 	
 	public void initWidgets() {
 		//add assignments (and adding) of JPanels here
-		
-		welcome = new WelcomePanel();
-		
-		Model model = new Model();
-		//model.addObserver(welcome);
-		model.addObserver(this);
 		
 		jcbFrom = new JComboBox<String>();
 		jcbTo = new JComboBox<String>();
@@ -91,13 +97,21 @@ public class View extends JFrame implements Observer {
 		
 		jcbFrom.addItem("--");
 		jcbTo.addItem("--");
+
 		
-		//jcbFrom.setSelectedItem("2010");
-		//jcbTo.setSelectedItem("--");
-		Controller controller = new Controller(model);
+		//Controller controller = new Controller(model);
+		GrabListener grabListener = new GrabListener(model, this);
 		
-		jcbFrom.addItemListener(controller);
-		jcbTo.addItemListener(controller);
+		LeftListener leftListener = new LeftListener(model);
+		RightListener rightListener = new RightListener(model);
+		jbLeft.addActionListener(leftListener);
+		jbRight.addActionListener(rightListener);
+
+		//**********************************
+//	    jcbFrom.addItemListener(controller);
+//		jcbTo.addItemListener(controller);
+		//**********************************
+		
 		
 		String s = (String)jcbFrom.getSelectedItem();
 		System.out.println(s);
@@ -108,48 +122,70 @@ public class View extends JFrame implements Observer {
 		
 		JLabel jlInfo = new JLabel(ripley.getLastUpdated(), SwingConstants.CENTER);
 		
+		// Populating the combo boxes
 		 for (int i = ripley.getStartYear(); i <= ripley.getLatestYear(); i++) {		
 				
 				jcbFrom.addItem(i + "");
 				jcbTo.addItem(i + "");
 				
 			}
-		
-	/*	JLabel jlWelcome = new JLabel("<html>Welcome to the Ripley API v" + ripley.getVersion() +
-				"<br>Please select from the dates above, in order to begin analysing UFO sighting data<html>",
-				SwingConstants.CENTER);
-		*/
-		
+
+		 
 		jpCombBox.add(jlFrom);
 		jpCombBox.add(jcbFrom);
+		
 		jpCombBox.add(jlTo);
 		jpCombBox.add(jcbTo);
+		
+		JButton jbGrab = new JButton("Grab Data");
+		jpCombBox.add(jbGrab);
+		jbGrab.addActionListener(grabListener);
 		
 		jpBottom.add(jbLeft, BorderLayout.WEST);
 		jpBottom.add(jbRight, BorderLayout.EAST);
 		jpBottom.add(jlInfo, BorderLayout.CENTER);
 		
-		
 		jpNorth = new JPanel(new BorderLayout());
 		jpCenter = new JPanel();
 		
 		//WelcomePanel welcome = new WelcomePanel();
-		jpCenter.add(welcome);
+		currentPanel = welcome;
+		jpCenter.add(currentPanel);
 		
 		this.setLayout(new BorderLayout());
 		
 		jpNorth.add(jpCombBox, BorderLayout.EAST);
 		
+		
+		JPanel test1 = new JPanel();
+		JLabel labelTest1 = new JLabel("PANEL 1");
+		test1.add(labelTest1);
+		
+		JPanel test2 = new JPanel();
+		JLabel labelTest2 = new JLabel("PANEL 2");
+		test2.add(labelTest2);
+		
+		JPanel test3 = new JPanel();
+		JLabel labelTest3 = new JLabel("PANEL 3");
+		test3.add(labelTest3);
+		//jpCenter.add(test, BorderLayout.CENTER);
+	
+		
 		this.add(jpNorth, BorderLayout.NORTH);
 		this.add(jpCenter, BorderLayout.CENTER);
 		this.add(jpBottom, BorderLayout.SOUTH);
+		
+		
+		panelList.add(welcome);
+		panelList.add(test1);
+		panelList.add(test2);
+		panelList.add(test3);
 		
 	}
 	
 	public String getJcbFrom() {
 		
 		String jcbFromValue = (String)jcbFrom.getSelectedItem();
-		System.out.println("jcbFrom: " + jcbFromValue);
 		return jcbFromValue;
 			
 	}
@@ -157,7 +193,6 @@ public class View extends JFrame implements Observer {
 	public String getJcbTo() {
 		
 		String jcbToValue = (String)jcbTo.getSelectedItem();
-		System.out.println("jcbTo: " + jcbToValue);
 		return jcbToValue;
 		
 	}
@@ -165,7 +200,12 @@ public class View extends JFrame implements Observer {
 	public void updateWelcomePanel(String from, String to) {
 		
 		welcome.addToDisplay(from, to); 
+			
+	}
+	
+	public void outOfBound() {
 		
+		welcome.outOfBound();
 		
 	}
 	
@@ -180,31 +220,82 @@ public class View extends JFrame implements Observer {
 		
 		Model model = (Model) arg0;
 		
-	//	Controller controller = new Controller(model);
-		
-		if (arg1.equals("Test 2")) {
+		if (arg1.equals("Grab Data")) {
 			
-			getJcbFrom();
-			getJcbTo();
 			updateWelcomePanel(getJcbFrom(), getJcbTo());
 
-			
-		//	grabData(getJcbFrom(), getJcbTo());
+     		grabData(getJcbFrom(), getJcbTo());
 			
 			System.out.println("Update View");
-			isDataReady = true;
-			model.dataGrabbing();
+			
+			jbLeft.setEnabled(true);
+			jbRight.setEnabled(true);
 					
 		}
 		
-		if (arg1.equals("Grab Data")) {
+		if (arg1.equals("Out of bounds")) {
 			
-			System.out.println("pute");
-			grabData(getJcbFrom(), getJcbTo());
+			outOfBound();
 			
 		}
+
+
+		if (arg1.equals("Left")) {
+			
+			if (index == 0) {
+				
+				index = 3;
+				jpCenter.remove(currentPanel);
+				currentPanel = panelList.get(index);
+				jpCenter.add(currentPanel, BorderLayout.CENTER);
+				jpCenter.revalidate();
+				jpCenter.repaint();
+				
+			} else if (index > 0) {
+				
+				System.out.println("Left clicked");
+				
+				System.out.println(index);
+				--index;
+				System.out.println(index);
+				jpCenter.remove(currentPanel);
+				currentPanel = panelList.get(index);
+				jpCenter.add(currentPanel, BorderLayout.CENTER);
+				jpCenter.revalidate();
+				jpCenter.repaint();
+				
+			}
+
+		}
 		
-		
+		if (arg1.equals("Right")) {
+			
+			if (index == 3) {
+				
+				index = 0;
+				jpCenter.remove(currentPanel);
+				currentPanel = panelList.get(index);
+				jpCenter.add(currentPanel, BorderLayout.CENTER);
+				jpCenter.revalidate();
+				jpCenter.repaint();
+				
+			} else {
+				
+                System.out.println("Right clicked");
+				
+				jpCenter.remove(currentPanel);
+				index++;
+				currentPanel = panelList.get(index);
+				System.out.println(index);
+				//index++;
+				System.out.println(index);
+				jpCenter.add(currentPanel, BorderLayout.CENTER);
+				jpCenter.revalidate();
+				jpCenter.repaint();
+				
+			}
+
+		}	
 		
 	}
 	

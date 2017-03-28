@@ -16,43 +16,36 @@ public class Model extends Observable {
 	
 	public void inform() {
 		
-		//WelcomePanel welcome = new WelcomePanel();
-		//welcome.update(this, "Test");
-		
-		
-		
 		System.out.println("inform's been called ");
-		
-	//	setChanged();	
-	//	notifyObservers("Test");
-			
-			setChanged();
-			notifyObservers("Test 2");
 
-		
-
-		//return flag;
-		
-	}
-	
-	public void dataGrabbing() {
-		
-		System.out.println("from ta mere");
 		setChanged();
 		notifyObservers("Grab Data");
-		
-	}
-	
-	
-	
-    public void infromTo() {
-		
-    	System.out.println("infromTo's been called");
-		setChanged();	
-		notifyObservers("cbTo changed");
 
+	}
+	
+	public void desinform() {
+		
+		System.out.println("desinform's been called ");
+		
+		setChanged();
+		notifyObservers("Out of bounds");
 		
 	}
+	
+	public void left() {
+		
+		setChanged();
+		notifyObservers("Left");
+		
+	}
+	
+public void right() {
+		
+		setChanged();
+		notifyObservers("Right");
+		
+	}
+	
     
     public boolean getFlag() {
     	

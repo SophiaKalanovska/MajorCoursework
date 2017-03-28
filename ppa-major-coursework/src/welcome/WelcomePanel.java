@@ -43,7 +43,7 @@ public class WelcomePanel extends JPanel implements Observer{
 //		model = new Model();
 	//	model.addObserver(this);
 	
-		String toWelcome = ("<html>Welcome to the Ripley API v" + ripley.getVersion() + 
+		String toWelcome = ("<html> <br><br><br><br><br><br> Welcome to the Ripley API v" + ripley.getVersion() + 
 				"<br> Please select from the dates above, in order to begin analysing UFO sighting data<html>");
 		
 	/*	JLabel jlWelcome = new JLabel("<html>Welcome to the Ripley API v" + ripley.getVersion() +
@@ -59,53 +59,30 @@ public class WelcomePanel extends JPanel implements Observer{
 		add(jlWelcome, BorderLayout.CENTER);
 		
 	}
-	
-/*	public void addToDisplay() {
-		
-		View view = new View();
-		
-		String more = ("<html>Welcome to the Ripley API v" + ripley.getVersion() + 
-				"<br> Please select from the dates above, in order to begin analysing UFO sighting data" +
-				"<br> <br> Date range selected: " + view.getJcbFrom());
-		System.out.println("ppp");
-		
-		jlWelcome.setText(more);
-	//	add(jlMore, BorderLayout.CENTER);
-		
-	}*/
-	
+
 	public void addToDisplay(String from, String to) {
 		
 		View view = new View();
 		long start;
 		long end;
 		
-		String more = ("<html>Welcome to the Ripley API v" + ripley.getVersion() + 
+		String more = ("<html> <br><br><br><br><br><br> Welcome to the Ripley API v" + ripley.getVersion() + 
 				"<br> Please select from the dates above, in order to begin analysing UFO sighting data" +
 				"<br> <br> Date range selected: " + from + " - " + to + "." + "<br> <br>" + 
 				"Grabbing data...");
 		
 		jlWelcome.setText(more);
+
+	}
+	
+	public void outOfBound() {
 		
-		//model.dataGrabbing();
 		
-		//grabData(from, to);
-	//	System.out.println("ppp");
-		
-	/*	start = System.currentTimeMillis();
-		//yyyy-MM-dd HH:mm:ss
-		ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
-		
-		end = System.currentTimeMillis() - start;
-		
-		more = ("<html>Welcome to the Ripley API v" + ripley.getVersion() + 
+		jlWelcome.setText("<html> <br><br><br><br><br><br> Welcome to the Ripley API v" + ripley.getVersion() + 
 				"<br> Please select from the dates above, in order to begin analysing UFO sighting data" +
-				"<br> <br> Date range selected: " + from + " - " + to + "." + "<br> <br>" + 
-				"Grabbing data... <br> <br>" +
-				" Data grabbed in " + end); 
+				"<br> <br>"
+				+ "The range you selected is incorrect. Please select a 'from' date lower thar the 'to' date<html>");
 		
-		jlWelcome.setText(more);*/
-	//	add(jlMore, BorderLayout.CENTER);
 		
 	}
 	
@@ -116,22 +93,43 @@ public class WelcomePanel extends JPanel implements Observer{
 		
 		start = System.currentTimeMillis();
 		//yyyy-MM-dd HH:mm:ss
-		ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
+		ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-12-31 23:59:59");
 		
 	    end = System.currentTimeMillis() - start;
 		
-		String data = ("<html>Welcome to the Ripley API v" + ripley.getVersion() + 
+	    String time = "";
+	    // To determine the time to be displayed
+	    if (end < 60000) {
+
+	    	 long seconds = end / 1000;
+	    	 long ms = end - seconds;
+	    	 
+	    	 time = seconds + " seconds, " + ms + " milliseconds";
+	    	
+	    } else {
+	    	
+	    	long minutes = end / 60000;
+	    	long seconds = (end - minutes) / 1000;
+	    	long ms = end - (seconds + minutes);
+	    	
+	    	time = minutes + " minutes," + seconds  + " seconds," + ms + " ms";
+	    	
+	    }   
+	    
+	    
+		String data = ("<html> <br><br><br><br><br><br> Welcome to the Ripley API v" + ripley.getVersion() + 
 				"<br> Please select from the dates above, in order to begin analysing UFO sighting data" +
 				"<br> <br> Date range selected: " + from + " - " + to + "." + "<br> <br>" + 
 				"Grabbing data... <br> <br>" +
-				" Data grabbed in " + end + "ms");
+				" Data grabbed in " + time);
+		
 		
 		System.out.println("hellooooooooo");
 		
 		jlWelcome.setText(data);
 		
 	}
-
+	
 
 	public void update(Observable arg0, Object arg1) {
 		
@@ -140,16 +138,7 @@ public class WelcomePanel extends JPanel implements Observer{
 		//Controller controller = new Controller(model);
 		
 		//View view = new View();
-		
-		if (arg1.equals("Test 2")) {
-			
-			System.out.println("Update Welcome Panel");
-			//addToDisplay();
-		//	view.getJcbFrom();
-		//	view.getJcbTo();
 
-
-		}
 
 		
 	}
