@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="batik-dom-1.8.jar"/>
 	<classpathentry kind="lib" path="batik-svg-dom-1.8.jar"/>
 	<classpathentry kind="lib" path="batik-script-1.8.jar"/>
+	<classpathentry kind="lib" path="batik-gui-util-1.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
