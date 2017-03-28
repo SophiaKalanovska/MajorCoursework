@@ -21,6 +21,7 @@ import welcome.WelcomePanel;
 import api.ripley.Ripley;
 import controller.LeftListener;
 import controller.RightListener;
+import statistics.StatisticsGui;
 
 
 public class View extends JFrame implements Observer {
@@ -43,6 +44,7 @@ public class View extends JFrame implements Observer {
 	Model model;
 	
 	WelcomePanel welcome;
+	StatisticsGui stat;
 
 	ArrayList<JPanel> panelList = new ArrayList<JPanel>();
 	JPanel currentPanel;
@@ -69,6 +71,7 @@ public class View extends JFrame implements Observer {
 		setLocationRelativeTo(null);
 		
         welcome = new WelcomePanel();
+        stat = new StatisticsGui(jcbFrom, jcbTo, ripley);
 		
 		model = new Model();
 		model.addObserver(this);
@@ -177,7 +180,7 @@ public class View extends JFrame implements Observer {
 		
 		
 		panelList.add(welcome);
-		panelList.add(test1);
+		panelList.add(stat);
 		panelList.add(test2);
 		panelList.add(test3);
 		

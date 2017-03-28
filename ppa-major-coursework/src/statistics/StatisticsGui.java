@@ -61,7 +61,7 @@ public class StatisticsGui extends JPanel {
 	public StatisticsGui(JComboBox<String> jcbFrom, JComboBox<String> jcbTo, Ripley ripley) {
 		statisticsModel = new StatisticsModel(ripley);
 		
-		jcbFrom.addActionListener(new ActionListener() {
+	/*	jcbFrom.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if (jcbFrom.getSelectedItem() != null) {
 
@@ -96,7 +96,7 @@ public class StatisticsGui extends JPanel {
 				}
 
 			}
-		});
+		});*/
 
 		this.setLayout(new BorderLayout());
 		JPanel jpNorth = new JPanel();
