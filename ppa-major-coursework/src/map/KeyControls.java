@@ -14,9 +14,9 @@ public class KeyControls extends KeyAdapter {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode()==KeyEvent.VK_CLOSE_BRACKET) {
-			mc.zoomIn();
+			//mc.zoomIn();
 		} else if (e.getKeyCode()==KeyEvent.VK_OPEN_BRACKET) {
-			mc.zoomOut();
+			//mc.zoomOut();
 		}
 	}
 

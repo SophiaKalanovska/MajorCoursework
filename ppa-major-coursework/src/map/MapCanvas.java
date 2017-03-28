@@ -8,15 +8,17 @@ import java.net.MalformedURLException;
 
 import org.apache.batik.swing.JSVGCanvas;
 
+import api.ripley.Ripley;
+
 public class MapCanvas extends JSVGCanvas {
 	
 	private double scaleFactor;
+	private Ripley ripley;
 	private JSVGCanvas.LocationListener receiveMouse;
 
 	public MapCanvas() {
 		super();
-		scaleFactor = 1;
-		initMouseListener();
+		//initMouseListener();
 		File sourceMap = new File("resources/map.svg");
 		try {
 			setURI(sourceMap.toURL().toString());
@@ -25,10 +27,15 @@ public class MapCanvas extends JSVGCanvas {
 			e.printStackTrace();
 		}
 		setBackground(new Color(0, true));
-		setLayout(new GridBagLayout());
+		setLayout(null);
 	}
 	
-	public void initMouseListener() {
+	public MapCanvas(Ripley ripley) {
+		this();
+		this.ripley = ripley;
+	}
+	
+	/*public void initMouseListener() {
 		receiveMouse = new LocationListener();
 	}
 	
@@ -52,6 +59,10 @@ public class MapCanvas extends JSVGCanvas {
 			zoom.scale(scaleFactor, scaleFactor);
 			setRenderingTransform(zoom, true);
 		}
-	}
+	}*/
 	
+	//to be invoked AFTER PLACEMENT
+	public void initialSize() {
+		
+	}
 }

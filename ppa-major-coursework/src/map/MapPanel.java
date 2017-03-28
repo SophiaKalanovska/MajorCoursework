@@ -13,21 +13,23 @@ import javax.swing.OverlayLayout;
 
 import org.apache.batik.swing.JSVGCanvas;
 
+import api.ripley.Ripley;
+
 public class MapPanel extends JPanel {
 
 	private MapCanvas myCanvas;
-	private double scaleFactor;
-	//private Ripley ripley;
+	private Ripley ripley;
 
-	public MapPanel() { //pass ripley object
+	public MapPanel(Ripley ripley) {
 		super();
+		this.ripley = ripley;
+		setPreferredSize(new Dimension(800, 500));
 		setLayout(new OverlayLayout(this));
-		setFocusable(true);
-		requestFocusInWindow();
-		myCanvas = new MapCanvas();
+		//setFocusable(true);
+		//requestFocusInWindow();
+		myCanvas = new MapCanvas(ripley);
 		add(myCanvas, BorderLayout.CENTER);
-		addKeyListener(new KeyControls(myCanvas));
-		myCanvas.setLayout(new BorderLayout());
+		//addKeyListener(new KeyControls(myCanvas));
 	}
 	
 	public JSVGCanvas getCanvas() {
@@ -36,7 +38,7 @@ public class MapPanel extends JPanel {
 
 	public static void main(String[] args) {
 		JFrame newFrame = new JFrame("Map");
-		MapPanel mp = new MapPanel();
+		MapPanel mp = new MapPanel(new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew=="));
 		newFrame.add(mp);
 		newFrame.pack();
 		newFrame.setLocationRelativeTo(null);
