@@ -21,6 +21,8 @@ import welcome.WelcomePanel;
 import api.ripley.Ripley;
 import controller.LeftListener;
 import controller.RightListener;
+import map.MapCanvas;
+import map.MapPanel;
 import statistics.StatisticsGui;
 
 
@@ -45,6 +47,7 @@ public class View extends JFrame implements Observer {
 	
 	WelcomePanel welcome;
 	StatisticsGui stat;
+	MapPanel map;
 
 	ArrayList<JPanel> panelList = new ArrayList<JPanel>();
 	JPanel currentPanel;
@@ -76,6 +79,7 @@ public class View extends JFrame implements Observer {
 		model.addObserver(this);
 		
 		index = 0;
+		map = new MapPanel(ripley);
 		initWidgets();
 		
 	}
@@ -180,7 +184,7 @@ public class View extends JFrame implements Observer {
 		
 		panelList.add(welcome);
 		panelList.add(stat);
-		panelList.add(test2);
+		panelList.add(map);
 		panelList.add(test3);
 		
 	}
@@ -215,6 +219,9 @@ public class View extends JFrame implements Observer {
 		
 		System.out.println("hello");
 		welcome.grabData(from, to);
+
+		map.setCanvas(new MapCanvas(ripley, from, to));
+
 		stat.init(getJcbFrom(), getJcbTo());
 		
 	}
