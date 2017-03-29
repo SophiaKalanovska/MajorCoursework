@@ -28,12 +28,26 @@ public class StatisticsModel {
 		numberNonUs = 0;
 		numberOfHoax = 0;
 		hash = new HashMap<String, Integer>();
+		data = new ArrayList<Incident>();
+		state = new ArrayList<String>();
 	}
 
 	public void setPanels(JTextPane nonUSjtaMessage, JTextPane hoaxesjtaMessage, String from, String to) {
+		
+/*		System.out.println(data.isEmpty());
+		System.out.println("from: " + from);
+		System.out.println("to: " + to);
+		data = ripley.getIncidentsInRange("2000-01-01 00:00:00", "2017-01-01 00:00:00");
+		System.out.println(data.isEmpty());  */  
+		
 		if (from != null && to != null) {
-			data = ripley.getIncidentsInRange(from, to);
-			if (data.size() == 0) {
+			
+			data = ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
+			
+			System.out.println("Weeeesh: " + data.isEmpty());
+			
+			//if (data.size() == 0) {
+			if (data.isEmpty()) {
 				nonUSjtaMessage.setText("No data");
 				hoaxesjtaMessage.setText("No data");
 			} else {
@@ -56,9 +70,12 @@ public class StatisticsModel {
 	}
 
 	public void setlikely(JTextPane likeliestjtaMessage, String from, String to) {
+		
 		if (from != null && to != null) {
-			data = ripley.getIncidentsInRange(from, to);
-			if (data.size() == 0) {
+			
+			data = ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
+			//if (data.size() == 0) {
+			if (data.isEmpty()) {
 				likeliestjtaMessage.setText("No data");
 			} else {
 				state = new ArrayList<String>();

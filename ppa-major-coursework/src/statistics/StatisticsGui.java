@@ -58,7 +58,11 @@ public class StatisticsGui extends JPanel {
 	private StatisticsModel statisticsModel;
 
 
-	public StatisticsGui(JComboBox<String> jcbFrom, JComboBox<String> jcbTo, Ripley ripley) {
+	public StatisticsGui(String from, String to, Ripley ripley) {
+		
+		this.from = from;
+		this.to = to;
+		
 		statisticsModel = new StatisticsModel(ripley);
 		
 	/*	jcbFrom.addActionListener(new ActionListener() {
@@ -78,6 +82,8 @@ public class StatisticsGui extends JPanel {
 				}
 			}
 		});
+		
+		
 
 		jcbTo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -96,7 +102,14 @@ public class StatisticsGui extends JPanel {
 				}
 
 			}
-		});*/
+		});  */
+		
+//		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		setFrom((String) from + "-01-01 00:00:00");
+		
+		
+//		statisticsModel.setPanels(nonUSjtaMessage, hoaxesjtaMessage, from, to);
+//		statisticsModel.setlikely(likeliestjtaMessage, from, to);
 
 		this.setLayout(new BorderLayout());
 		JPanel jpNorth = new JPanel();
@@ -192,6 +205,14 @@ public class StatisticsGui extends JPanel {
 		jpSouth.add(jpEast2, BorderLayout.CENTER);
 		jpNorth.add(PlaceHolder, BorderLayout.EAST);
 
+	}
+	
+	public void init(String from,String to) {
+		
+		statisticsModel.setPanels(nonUSjtaMessage, hoaxesjtaMessage, from, to);
+		statisticsModel.setlikely(likeliestjtaMessage, from, to);
+
+		
 	}
 	
 	public String getFrom() {
