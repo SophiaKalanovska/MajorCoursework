@@ -71,7 +71,6 @@ public class View extends JFrame implements Observer {
 		setLocationRelativeTo(null);
 		
         welcome = new WelcomePanel();
-        stat = new StatisticsGui(jcbFrom, jcbTo, ripley);
 		
 		model = new Model();
 		model.addObserver(this);
@@ -100,7 +99,6 @@ public class View extends JFrame implements Observer {
 		
 		jcbFrom.addItem("--");
 		jcbTo.addItem("--");
-
 		
 		//Controller controller = new Controller(model);
 		GrabListener grabListener = new GrabListener(model, this);
@@ -178,6 +176,7 @@ public class View extends JFrame implements Observer {
 		this.add(jpCenter, BorderLayout.CENTER);
 		this.add(jpBottom, BorderLayout.SOUTH);
 		
+		stat = new StatisticsGui(getJcbFrom(), getJcbTo(), ripley);
 		
 		panelList.add(welcome);
 		panelList.add(stat);
@@ -216,6 +215,7 @@ public class View extends JFrame implements Observer {
 		
 		System.out.println("hello");
 		welcome.grabData(from, to);
+		stat.init(getJcbFrom(), getJcbTo());
 		
 	}
 	
