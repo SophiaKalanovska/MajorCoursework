@@ -19,7 +19,7 @@ public class MapCanvas extends JSVGCanvas {
 	public MapCanvas() {
 		super();
 		//initMouseListener();
-		File sourceMap = new File("resources/map.svg");
+		File sourceMap = new File("resources/map.svg"); //assign source file
 		try {
 			setURI(sourceMap.toURL().toString());
 		} catch (MalformedURLException e) {
@@ -34,6 +34,8 @@ public class MapCanvas extends JSVGCanvas {
 		this();
 		this.ripley = ripley;
 	}
+	
+	//type whatever you want
 	
 	/*public void initMouseListener() {
 		receiveMouse = new LocationListener();
