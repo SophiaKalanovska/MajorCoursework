@@ -54,6 +54,8 @@ public class View extends JFrame implements Observer {
 	int index;
 	
 	Ripley ripley;
+	
+	
 
 	//Controller controller;
 	
@@ -273,6 +275,12 @@ public class View extends JFrame implements Observer {
 				jpCenter.repaint();
 				
 			}
+			
+			if (index == 2) {
+				
+				this.setSize(new Dimension(930, 695));
+				
+			}
 
 		}
 		
@@ -299,6 +307,13 @@ public class View extends JFrame implements Observer {
 				jpCenter.repaint();
 				
 			}
+			
+            if (index == 2) {
+				
+				this.setSize(new Dimension(930, 695));
+				
+			}
+
 
 		}	
 		
