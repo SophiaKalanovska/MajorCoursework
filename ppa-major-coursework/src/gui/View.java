@@ -21,6 +21,8 @@ import welcome.WelcomePanel;
 import api.ripley.Ripley;
 import controller.LeftListener;
 import controller.RightListener;
+import map.MapCanvas;
+import map.MapPanel;
 import statistics.StatisticsGui;
 
 
@@ -45,6 +47,7 @@ public class View extends JFrame implements Observer {
 	
 	WelcomePanel welcome;
 	StatisticsGui stat;
+	MapPanel map;
 
 	ArrayList<JPanel> panelList = new ArrayList<JPanel>();
 	JPanel currentPanel;
@@ -65,19 +68,20 @@ public class View extends JFrame implements Observer {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//need to set some sort of layout manager
-		setPreferredSize(new Dimension(800, 600));
+		index = 0;
+		welcome = new WelcomePanel();
+        stat = new StatisticsGui(jcbFrom, jcbTo, ripley);
+        map = new MapPanel(ripley);
+        model = new Model();
+		model.addObserver(this);
+		initWidgets();
+		
+		
+		
+		
+		setMinimumSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
-		
-        welcome = new WelcomePanel();
-        stat = new StatisticsGui(jcbFrom, jcbTo, ripley);
-		
-		model = new Model();
-		model.addObserver(this);
-		
-		index = 0;
-		initWidgets();
 		
 	}
 	
@@ -181,7 +185,7 @@ public class View extends JFrame implements Observer {
 		
 		panelList.add(welcome);
 		panelList.add(stat);
-		panelList.add(test2);
+		panelList.add(map);
 		panelList.add(test3);
 		
 	}
@@ -216,6 +220,8 @@ public class View extends JFrame implements Observer {
 		
 		System.out.println("hello");
 		welcome.grabData(from, to);
+		map.setCanvas(new MapCanvas(ripley, from, to));
+		
 		
 	}
 	
@@ -264,6 +270,13 @@ public class View extends JFrame implements Observer {
 				jpCenter.remove(currentPanel);
 				currentPanel = panelList.get(index);
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
+				if (index == 2) {
+					pack();
+					setResizable(false);
+				} else {
+					pack();
+					setResizable(true);
+				}
 				jpCenter.revalidate();
 				jpCenter.repaint();
 				
@@ -293,6 +306,13 @@ public class View extends JFrame implements Observer {
 				//index++;
 				System.out.println(index);
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
+				if (index == 2) {
+					pack();
+					setResizable(false);
+				} else {
+					pack();
+					setResizable(true);
+				}
 				jpCenter.revalidate();
 				jpCenter.repaint();
 				
