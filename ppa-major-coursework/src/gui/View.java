@@ -258,9 +258,7 @@ public class View extends JFrame implements Observer {
 				
 				System.out.println("Left clicked");
 				
-				System.out.println(index);
 				--index;
-				System.out.println(index);
 				jpCenter.remove(currentPanel);
 				currentPanel = panelList.get(index);
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
@@ -289,9 +287,6 @@ public class View extends JFrame implements Observer {
 				jpCenter.remove(currentPanel);
 				index++;
 				currentPanel = panelList.get(index);
-				System.out.println(index);
-				//index++;
-				System.out.println(index);
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
 				jpCenter.revalidate();
 				jpCenter.repaint();
