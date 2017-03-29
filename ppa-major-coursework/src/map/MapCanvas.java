@@ -6,6 +6,8 @@ import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.net.MalformedURLException;
 
+import javax.swing.JLabel;
+
 import org.apache.batik.swing.JSVGCanvas;
 
 import api.ripley.Ripley;
@@ -33,6 +35,13 @@ public class MapCanvas extends JSVGCanvas {
 	public MapCanvas(Ripley ripley) {
 		this();
 		this.ripley = ripley;
+		AlienIconManager placePins = new AlienIconManager(ripley, "1990", "2000");
+		JLabel[] pins = placePins.getAllPins();
+		for (int i=0; i<pins.length; i++) {
+			if (pins[i] != null) {
+				add(pins[i]);
+			}
+		}
 	}
 	
 	//type whatever you want
