@@ -24,7 +24,7 @@ public class StatisticsGui extends JPanel {
 	public StatisticsGui(Ripley ripley) {
 		super();
 		this.ripley = ripley;
-		savePath = "Saving the path";
+		savePath = " ";
 		FourStatistics = new SingleStatistic[4];
 		stats = new String[4];
 		initWidgets();
@@ -39,15 +39,25 @@ public class StatisticsGui extends JPanel {
 			FourStatistics[i].setPreferredSize(new Dimension(375, 250));
 			add(FourStatistics[i]);
 		}
-		readFromFile();
 		
-		try {
-			initStats();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		readFromFile();
+			
+
+			try {
+				initStats();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+
+			try {
+				initStats();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 	}
 
 	public void initStats() throws NumberFormatException, Exception {
@@ -86,19 +96,14 @@ public class StatisticsGui extends JPanel {
 			if (!line.isEmpty()) {
 				stats = line.split(" ");
 			} else {
+				System.out.println("I am getting here");
 				setDefaultFourPanels();
 			}
 		} catch (IOException e) {
-			setDefaultSubPanels();
+			setDefaultFourPanels();
 		}
 	}
 	
-	private void setDefaultSubPanels() {
-		for (int i = 0; i < FourStatistics.length; i++) {
-			stats[i] = i + 1 + "";
-		}
-	}
-
 	public void update(String from, String to) {
 
 		from = from + "-01-01 00:00:00";
@@ -108,7 +113,9 @@ public class StatisticsGui extends JPanel {
 		statisticsModel.setNonUS(from, to);
 		statisticsModel.setLikely(from, to);
 		statisticsModel.setShape(from, to);
+		statisticsModel.likeliestCity(from, to);
 		statisticsModel.getMostLikelyTime(from, to);
+		
 		try {
 			StatisticsModel.getHTML();
 		} catch (Exception e1) {
@@ -124,4 +131,3 @@ public class StatisticsGui extends JPanel {
 		}
 	}
 }
-
