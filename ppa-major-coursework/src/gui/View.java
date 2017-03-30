@@ -80,6 +80,22 @@ public class View extends JFrame implements Observer {
 		
 		
 		setMinimumSize(new Dimension(800, 600));
+		
+		index = 0;
+		welcome = new WelcomePanel();
+        stat = new StatisticsGui(ripley);
+
+        stat = new StatisticsGui(ripley);
+
+        map = new MapPanel(ripley);
+        model = new Model();
+		model.addObserver(this);
+		initWidgets();
+		
+		
+		
+		
+		setMinimumSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
 		
