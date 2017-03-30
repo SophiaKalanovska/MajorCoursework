@@ -30,6 +30,7 @@ public class View extends JFrame implements Observer {
 	
 	JComboBox<String> jcbFrom;
 	JComboBox<String> jcbTo;
+	
 	JButton jbGrab;
 	
 	JLabel jlFrom;
@@ -74,12 +75,16 @@ public class View extends JFrame implements Observer {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+
 		//need to set some sort of layout manager
 		setPreferredSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
+
 		
         welcome = new WelcomePanel();
+        
+        stat = new StatisticsGui(ripley);
 		
 		model = new Model();
 		model.addObserver(this);
@@ -109,6 +114,7 @@ public class View extends JFrame implements Observer {
 		
 		jcbFrom.addItem("--");
 		jcbTo.addItem("--");
+
 		
 		//Controller controller = new Controller(model);
 		GrabListener grabListener = new GrabListener(model, this);
@@ -148,7 +154,9 @@ public class View extends JFrame implements Observer {
 		jpCombBox.add(jlTo);
 		jpCombBox.add(jcbTo);
 		
+		
 		jbGrab = new JButton("Grab Data");
+
 		jpCombBox.add(jbGrab);
 		jbGrab.addActionListener(grabListener);
 		
@@ -186,7 +194,7 @@ public class View extends JFrame implements Observer {
 		this.add(jpCenter, BorderLayout.CENTER);
 		this.add(jpBottom, BorderLayout.SOUTH);
 		
-		stat = new StatisticsGui(getJcbFrom(), getJcbTo(), ripley);
+
 		
 		panelList.add(welcome);
 		panelList.add(stat);
@@ -225,26 +233,27 @@ public class View extends JFrame implements Observer {
 		
 		System.out.println("hello");
 		welcome.grabData(from, to);
+
+		map.setCanvas(new MapCanvas(ripley, from, to));
 		
 		fromm = getJcbFrom();
 		too = getJcbTo();
 
 		map.setCanvas(new MapCanvas(ripley, from, to));
 
-		stat.init(getJcbFrom(), getJcbTo());
+		stat.update(from,to);
 		
 	}
 	
 	public void update(Observable arg0, Object arg1) {
 		
 		Model model = (Model) arg0;
-		
+
 		if (arg1.equals("Grab Data")) {
 			
 			updateWelcomePanel(getJcbFrom(), getJcbTo());
 
      		grabData(getJcbFrom(), getJcbTo());
-     		
 			
 			System.out.println("Update View");
 			

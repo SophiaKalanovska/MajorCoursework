@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -44,34 +43,12 @@ public class StatisticsModel {
 		like = "";
 		likeshape = "";
 		hash = new HashMap<String, Integer>();
-		data = new ArrayList<Incident>();
-		state = new ArrayList<String>();
 		hashshape = new HashMap<String, Integer>();
 	}
 
-	public void setPanels(JTextPane nonUSjtaMessage, JTextPane hoaxesjtaMessage, String from, String to) {
-		
-/*		System.out.println(data.isEmpty());
-		System.out.println("from: " + from);
-		System.out.println("to: " + to);
-		data = ripley.getIncidentsInRange("2000-01-01 00:00:00", "2017-01-01 00:00:00");
-		System.out.println(data.isEmpty());  */  
-=======
 	public void setHoaxes(String from, String to) {
 		
 		if (from != null && to != null) {
-			
-			data = ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
-			
-			System.out.println("Weeeesh: " + data.isEmpty());
-			
-			//if (data.size() == 0) {
-			if (data.isEmpty()) {
-				nonUSjtaMessage.setText("No data");
-				hoaxesjtaMessage.setText("No data");
-			} else {
-				
-			}
 			data = ripley.getIncidentsInRange(from, to);
 			for (int i = 0; i < data.size(); i++) {
 
@@ -88,7 +65,6 @@ public class StatisticsModel {
 		if (from != null && to != null) {
 			data = ripley.getIncidentsInRange(from, to);
 
-
 				for (int i = 0; i < data.size(); i++) {
 
 					if (data.get(i).getState().equals("Not specified.")) {
@@ -98,24 +74,10 @@ public class StatisticsModel {
 		}
 	}
 
-
-	public void setlikely(JTextPane likeliestjtaMessage, String from, String to) {
-		
-
 	public void setLikely(String from, String to) {
-
 		if (from != null && to != null) {
-
-			
-			data = ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
-			//if (data.size() == 0) {
-			if (data.isEmpty()) {
-				likeliestjtaMessage.setText("No data");
-			} else {
-
 			data = ripley.getIncidentsInRange(from, to);
 			
-
 				state = new ArrayList<String>();
 				for (int i = 0; i < data.size(); i++) {
 					state.add(data.get(i).getState());
@@ -138,97 +100,8 @@ public class StatisticsModel {
 				}
 			}
 		}
-<<<<<<< HEAD
-	}
 	
-/*	public String likeliestTime(String from, String to) {
-		
-		
-		
-		data = ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
-		
-		double conversionTime = (100.0/60.0);
 
-		int averageHour = 0;
-		float averageMinute = 0;
-		
-		if (data.isEmpty()) {
-			
-			System.out.println("sef le bg");
-			
-			return "No data";
-			
-		} else {
-			
-			System.out.println("sefthi le bg");
-			
-			for (int i = 0; i < data.size(); i++) {
-				
-			//	System.out.println(data.get(i).getDateAndTime().substring(11, 13));
-			//	System.out.println(data.get(i).getDateAndTime().substring(14, 16));
-				System.out.println(data.get(i).getDateAndTime().substring(11, 16));
-				
-				averageHour += Integer.parseInt(data.get(i).getDateAndTime().substring(11, 13));
-				averageMinute += ((Float.parseFloat(data.get(i).getDateAndTime().substring(14, 16))));
-				
-			}
-			
-			
-		}
-		
-		System.out.println(averageMinute * (100/60));
-		System.out.println(averageMinute);
-		
-		averageMinute *= conversionTime;
-		
-		System.out.println("Average hour: " + averageHour / data.size());
-		System.out.println("Average minutes: " + averageMinute / data.size());
-		
-		return "pute";
-		
-	} */
-	
-	
-	public String likeliestTime(String from, String to) {
-		
-		data = ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
-		List<String> time = new ArrayList<String>();
-		
-		for (int i= 0; i < data.size(); i++) {
-			
-			time.add(data.get(i).getDateAndTime().substring(11, 16));
-			
-		}
-        
-		Set<String> unique = new HashSet<String>(time);
-
-		
-		if (data.isEmpty()) {
-			
-			System.out.println("sef le bg");
-			
-			return "No data";
-			
-		} else {
-			
-			System.out.println("sefthi le bg");
-			
-			for (int i = 0; i < data.size(); i++) {
-
-				System.out.println(data.get(i).getDateAndTime().substring(11, 16));
-
-			}
-			
-			for (String key : unique) {
-			    System.out.println(key + ": " + Collections.frequency(time, key));
-			}
-			
-			
-		}
-		
-		return "pute";
-		
-	}
 	
 	
 	public void setShape(String from, String to) {
