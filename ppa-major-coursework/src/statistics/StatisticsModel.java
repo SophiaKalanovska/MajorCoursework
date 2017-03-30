@@ -275,6 +275,8 @@ public class StatisticsModel {
  		
  		data = ripley.getIncidentsInRange(from, to);
  		List<String> city = new ArrayList<String>();
+ 		
+ 		ArrayList<Integer> count = new ArrayList<Integer>();
  		int current = 0;
  	//	String currentCity = "";
  		
@@ -285,11 +287,10 @@ public class StatisticsModel {
  		}
          
  		Set<String> unique = new HashSet<String>(city);
-
- 		
+ 	
  		if (data.isEmpty()) {
  			
- 	//		System.out.println("sef le bg");
+		System.out.println("sef le bg");
  			
  			return "No data";
  			
@@ -304,11 +305,15 @@ public class StatisticsModel {
  				
  				for (String key : unique) {
  					
+ 					System.out.println(key + ": " + Collections.frequency(city, key));
+ 					
  					if (Collections.frequency(city, key) == 1 && data.size() > 1) {
  						
- 						currentCity = "Not enough data";
+ 						count.add(Collections.frequency(city, key));
  						
- 					} else {
+ 						currentCity = "All cities are equally likely";
+ 						
+ 					} 
  						
  						if (Collections.frequency(city, key) > current) {
  		 			    	
@@ -320,30 +325,22 @@ public class StatisticsModel {
  		 			    }
  						
  						
- 					}
+ 					
  					
  				}
 
  			}
  			
- 		/*	for (String key : unique) {
+ 			if (counting(count) && count.size() > 1) {
  				
- 			    System.out.println(key + ": " + Collections.frequency(city, key));
- 			    
- 			    System.out.println("hein: " + Collections.frequency(city, key));
- 			    
- 			    if (Collections.frequency(city, key) > current) {
- 			    	
- 			    	current = Collections.frequency(city, key);
- 			    	currentCity = key;
- 			    	System.out.println("current: " + current);
- 			    	System.out.println("Current city: " + currentCity);
- 			    	
- 			    }
- 
+ 				currentCity = "All cities had 1 occurence exactly";
+ 				
+ 			}
+ 			
+ 			
 
- 			} */
- 
+ 			
+
  			System.out.println("GROSSE FOLLE : " + currentCity);
  			
  		}
@@ -352,6 +349,21 @@ public class StatisticsModel {
  		
  	}
      
+     public boolean counting(ArrayList<Integer> c) {
+    	 
+ 			for (int b = 0; b < c.size(); b++) {
+ 				
+ 				if (c.get(b) != 1) {
+ 					
+ 					return false;
+ 					
+ 				}
+ 				
+ 			}
+    	 
+    	 return true;
+    	 
+     }
      
 	public static String getTotalResults() {
 		return totalResults;
