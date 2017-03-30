@@ -85,7 +85,13 @@ public class StatisticsGui extends JPanel {
 				setDefaultFourPanels();
 			}
 		} catch (IOException e) {
-			setDefaultFourPanels();
+			setDefaultSubPanels();
+		}
+	}
+	
+	private void setDefaultSubPanels() {
+		for (int i = 0; i < FourStatistics.length; i++) {
+			stats[i] = i + 1 + "";
 		}
 	}
 
@@ -98,6 +104,7 @@ public class StatisticsGui extends JPanel {
 		statisticsModel.setNonUS(from, to);
 		statisticsModel.setLikely(from, to);
 		statisticsModel.setShape(from, to);
+		statisticsModel.getMostLikelyTime(from, to);
 		try {
 			StatisticsModel.getHTML();
 		} catch (Exception e1) {
@@ -112,5 +119,4 @@ public class StatisticsGui extends JPanel {
 			}
 		}
 	}
-
 }
