@@ -116,6 +116,7 @@ public class WelcomePanel extends JPanel implements Observer{
 	    	
 	    }   
 	    
+
 	    String acknowledgement1 = ripley.getAcknowledgementString().substring(0, 72);
 	    String acknowledgement2 = ripley.getAcknowledgementString().substring(72, ripley.getAcknowledgementString().length());
 	    
