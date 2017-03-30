@@ -36,7 +36,6 @@ public class StatisticsModel {
 	// private Search search;
 	private String mostLikelySightingTimeFrame;
 
-
 	public StatisticsModel(Ripley ripley) {
 		this.ripley = ripley;
 		numberNonUs = 0;
@@ -177,7 +176,7 @@ public class StatisticsModel {
 	      rd.close();
 	     // return result.toString();
 	   }
-
+	
 	public void getMostLikelyTime(String from, String to) {
 		if(from != null && to != null){
 			
@@ -236,6 +235,7 @@ public class StatisticsModel {
 	public String getMostLikelySightingTimeFrame() {
 		return mostLikelySightingTimeFrame;
 	}
+	
 
 	public static String getTotalResults() {
 		return totalResults;

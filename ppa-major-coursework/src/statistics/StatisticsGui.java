@@ -1,6 +1,7 @@
 package statistics;
 
 import java.awt.GridLayout;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -33,11 +34,13 @@ public class StatisticsGui extends JPanel {
 		setLayout(new GridLayout(2, 2));
 		statisticsModel = new StatisticsModel(ripley);
 		for (int i = 0; i < FourStatistics.length; i++) {
+
 			FourStatistics[i] = new SingleStatistic(statisticsModel, this);
 			FourStatistics[i].setPreferredSize(new Dimension(375, 250));
 			add(FourStatistics[i]);
 		}
 		readFromFile();
+		
 		try {
 			initStats();
 		} catch (NumberFormatException e) {
@@ -52,8 +55,9 @@ public class StatisticsGui extends JPanel {
 		for (int i = 0; i < FourStatistics.length; i++) {
 			FourStatistics[i].initializeStat(Integer.parseInt(stats[i]));
 		}
-	}
 
+	}
+	
 	private void setDefaultFourPanels() {
 		for (int i = 0; i < FourStatistics.length; i++) {
 			stats[i] = i + 1 + "";
@@ -120,3 +124,4 @@ public class StatisticsGui extends JPanel {
 		}
 	}
 }
+
