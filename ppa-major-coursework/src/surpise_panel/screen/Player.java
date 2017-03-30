@@ -94,7 +94,7 @@ public class Player implements KeyListener{
 	
 	private void addBullet() {
 		if(System.currentTimeMillis() - shootInterval > 200){
-			bullets.add(new Bullets(x + w/2, y));
+			bullets.add(new Bullets(x + w/2, y, false));
 			shootInterval = System.currentTimeMillis();
 		}
 	}
@@ -113,8 +113,15 @@ public class Player implements KeyListener{
 				return true;
 			}
 		}
-		
 		return false;
+	}
+	
+	public double getX() {
+		return x;
+	}
+	
+	public double getY() {
+		return y;
 	}
 
 }

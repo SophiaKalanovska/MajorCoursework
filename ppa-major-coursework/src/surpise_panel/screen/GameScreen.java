@@ -9,24 +9,24 @@ import java.util.ArrayList;
 import api.ripley.Incident;
 import api.ripley.Ripley;
 import surpise_panel.constants.Constants;
-import surpise_panel.state.SuperState;
 
-public class GameScreen implements SuperState{
+public class GameScreen{
 	
 	private Player player;
 	private ArrayList<ArrayList<Alien>> alienBlock = new ArrayList<ArrayList<Alien>>();
-	//private ArrayList<Alien> aliens;
 	private ArrayList<Incident> allIncidentsFromSelectedRange;
+	
 	private boolean gameOver = false;
-	private RipleysModel model;
+	private boolean gameWon = false;
+	
+	long lastShootTime = 0;
 	
 	private int score;
-	public GameScreen( String from, String to) {
-// ######## initialise variables ###########
+	
+	public GameScreen() {
 		score = 0;
 		player = new Player(350, 450, 50, 50);
-		//model = new RipleysModel( from, to);
-		//System.out.println("num of sightings from game: " + model.getNumOfSightings());
+
 // ######## create aliens ###########
 		int rowHeight = Constants.SCREEN_HEIGHT/2;
 		int leftCoord = 10;
@@ -56,7 +56,7 @@ public class GameScreen implements SuperState{
 		return height;
 	}
 
-	@Override
+	
 	public void update(double delta) {
 		player.update(delta);
 		
@@ -65,6 +65,7 @@ public class GameScreen implements SuperState{
 				alienBlock.get(i).get(j).move(delta);
 			}			
 		}
+		
 		//for some reason if this is put into the first nested for loop the first row 
 		//doesnt move down, so the move down function is now in its own nested for loop
 		if(Alien.getMoveDown()){
@@ -75,13 +76,24 @@ public class GameScreen implements SuperState{
 			}
 		}
 		
+		//randomly choose alien to shoot
+		if(System.currentTimeMillis() - lastShootTime > 500){
+			if(alienBlock.size() > 0){
+				int getRandomRow = (int)(Math.random() * (alienBlock.size()-1) + 0);
+				int getRandomAlien = (int)(Math.random() * (alienBlock.get(getRandomRow).size() - 1) + 0);
+				
+				alienBlock.get(getRandomRow).get(getRandomAlien).addBullet();
+				lastShootTime = System.currentTimeMillis();
+			}
+		}
+		
 		Alien.setMoveDown(false);
 		
 		collision();
 		checkGameOver();
 	}
 
-	@Override
+	
 	public void draw(Graphics2D g) {
 		player.draw(g);
 
@@ -95,21 +107,35 @@ public class GameScreen implements SuperState{
 		g.setFont(new Font("Impact", Font.PLAIN, 20));
 		g.drawString("Score: " + score, 50, 50);
 		
-		if(gameOver){
-			g.setColor(Color.WHITE);
-			g.setFont(new Font("Impact", Font.PLAIN, 100));
-			g.drawString("Game Over!", 130, 250);
-		}
+		if(gameOver) drawEndGameMessage(g, "Game Over!");
+		else if(gameWon) drawEndGameMessage(g, "You Won!!");
+	}
+	
+	private void drawEndGameMessage(Graphics2D g, String text){
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Impact", Font.PLAIN, 100));
+		g.drawString(text, 130, 250);
+		g.setFont(new Font("Impact", Font.PLAIN, 50));
+		g.drawString("press r to restart", 150, 320);
 	}
 	
 	public void collision() {
 		for(int i = 0; i < alienBlock.size(); i++){
 			for(int j = 0; j < alienBlock.get(i).size(); j++){
+				
 				Alien a = alienBlock.get(i).get(j);
+				
+				//player's bullet collision with alien
 				if(player.checkBulletCollision(a.getX(), a.getY(), a.getWidth(), a.getHeight())){
 					alienBlock.get(i).remove(j);
 					if(alienBlock.get(i).size() == 0) alienBlock.remove(i);
 					score++;
+					break;
+				}
+				
+				//alien bullet collision with player
+				if(alienBlock.get(i).get(j).checkBulletCollision((int)player.getX(), (int)player.getY())){
+					gameOver = true;
 					break;
 				}
 			}
@@ -120,25 +146,20 @@ public class GameScreen implements SuperState{
 		if(Alien.getGameOver()){
 			gameOver = true;
 		}
+		if(alienBlock.size() == 0) gameWon = true;
 	}
 	
-	
-	@Override
-	public void init(Canvas canvas) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public Player getPlayer() {
 		return player;
 	}
 	
 	public boolean getGameOver() {
-		return gameOver;
+		if(gameOver || gameWon) return true;
+		else return false;
 	}
 	
 	public int getScore(){
 		return score;
 	}
-
 }
