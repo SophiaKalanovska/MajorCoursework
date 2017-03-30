@@ -141,6 +141,7 @@ public class StatisticsGui extends JPanel {
 		otherlabel = new JLabel("Sightings via other platforms", SwingConstants.CENTER);
 		otherjtaMessage = new JTextPane();
 		otherjtaMessage.setBackground(null);
+		otherjtaMessage.setEditable(false);
 
 		jpWest1 = new JPanel();
 		jpWest1.setLayout(new BorderLayout());
