@@ -1,86 +1,83 @@
 package statistics;
 
-import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
 import api.ripley.Ripley;
-import java.util.Date;
-
 
 public class StatisticsGui extends JPanel {
-
-	
-	private JTextArea PlaceHolder;
-	
-	private JTextPane hoaxesjtaMessage;
-	private JButton hoaxesright;
-	private JButton hoaxesleft;
-	private JLabel hoaxeslabel;
-
-	private JTextPane nonUSjtaMessage;
-	private JButton nonUSright;
-	private JButton nonUSleft;
-	private JLabel nonUSlabel;
-
-	private JTextPane likeliestjtaMessage;
-	private JButton likeliestright;
-	private JButton likeliestleft;
-	private JLabel likeliestlabel;
-
-	private JTextPane otherjtaMessage;
-	private JButton otherright;
-	private JButton otherleft;
-	private JLabel otherlabel;
-
-	private JPanel jpEast1;
-	private JPanel jpWest1;
-	private JPanel jpEast2;
-	private JPanel jpWest2;
-
-
-	private String from;
-	private String to;
-	
 	private StatisticsModel statisticsModel;
+	private SingleStatistic[] FourStatistics;
+	private String[] stats;
+	private Ripley ripley;
 
+	public StatisticsGui(Ripley ripley) {
+		super();
+		this.ripley = ripley;
+		FourStatistics = new SingleStatistic[4];
+		stats = new String[4];
+		initWidgets();
+	}
 
 	public StatisticsGui(String from, String to, Ripley ripley) {
 		
 		this.from = from;
 		this.to = to;
 		
-		statisticsModel = new StatisticsModel(ripley);
-		
-	/*	jcbFrom.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				if (jcbFrom.getSelectedItem() != null) {
+	public void initWidgets() {
+		setLayout(new GridLayout(2, 2));
 
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					setFrom((String) jcbFrom.getSelectedItem() + "-01-01 00:00:00");
-					try {
-						Date fromAsDate = df.parse(from);
-						setFrom(df.format(fromAsDate));
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-					statisticsModel.setPanels(nonUSjtaMessage, hoaxesjtaMessage, from, to);
-					statisticsModel.setlikely(likeliestjtaMessage, from, to);
-				}
+		statisticsModel = new StatisticsModel(ripley);
+		for (int i = 0; i < FourStatistics.length; i++) {
+			FourStatistics[i] = new SingleStatistic(statisticsModel);
+			FourStatistics[i].setPreferredSize(new Dimension(375, 250));
+			add(FourStatistics[i]);
+		}
+		setDefaultSubPanels();
+		try {
+			initStats();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void initStats() throws NumberFormatException, Exception {
+		FourStatistics[0].resetDsiplayStats();
+		for (int i = 0; i < FourStatistics.length; i++) {
+			FourStatistics[i].initializeStat(Integer.parseInt(stats[i]));
+		}
+	}
+
+	private void setDefaultSubPanels() {
+		for (int i = 0; i < FourStatistics.length; i++) {
+			stats[i] = i + 1 + "";
+		}
+	}
+
+	public void update(String from, String to) {
+
+		from = from + "-01-01 00:00:00";
+		to = to + "-12-31 00:00:00";
+
+		statisticsModel.setHoaxes(from, to);
+		statisticsModel.setNonUS(from, to);
+		statisticsModel.setLikely(from, to);
+		statisticsModel.setShape(from, to);
+		try {
+			StatisticsModel.getHTML();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		for (int i = 0; i < FourStatistics.length; i++) {
+			try {
+				FourStatistics[i].updateStatistic(FourStatistics[i].getStat());
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+
 		});
 		
 		
@@ -231,6 +228,9 @@ public class StatisticsGui extends JPanel {
 
 	public void setTo(String to) {
 		this.to = to;
+
+		}
+
 	}
 
 }
