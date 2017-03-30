@@ -273,7 +273,8 @@ public class StatisticsModel {
      
      public String likeliestCity(String from, String to) {
  		
- 		data = ripley.getIncidentsInRange(from, to);
+ 	data = ripley.getIncidentsInRange(from, to);
+ 		
  		List<String> city = new ArrayList<String>();
  		
  		ArrayList<Integer> count = new ArrayList<Integer>();
@@ -290,7 +291,7 @@ public class StatisticsModel {
  	
  		if (data.isEmpty()) {
  			
-		System.out.println("sef le bg");
+		    System.out.println("sef le bg");
  			
  			return "No data";
  			
@@ -305,13 +306,14 @@ public class StatisticsModel {
  				
  				for (String key : unique) {
  					
- 					System.out.println(key + ": " + Collections.frequency(city, key));
+ 				//	System.out.println(key + ": " + Collections.frequency(city, key));
  					
  					if (Collections.frequency(city, key) == 1 && data.size() > 1) {
  						
  						count.add(Collections.frequency(city, key));
+ 						//System.out.println("COunt : " +count);
  						
- 						currentCity = "All cities are equally likely";
+ 						//currentCity = "All cities are equally likely";
  						
  					} 
  						
@@ -333,6 +335,7 @@ public class StatisticsModel {
  			
  			if (counting(count) && count.size() > 1) {
  				
+ 				
  				currentCity = "All cities had 1 occurence exactly";
  				
  			}
@@ -343,18 +346,23 @@ public class StatisticsModel {
 
  			System.out.println("GROSSE FOLLE : " + currentCity);
  			
- 		}
+ 		} 
  		
- 		return currentCity;
+ 		return currentCity; 
  		
  	}
      
      public boolean counting(ArrayList<Integer> c) {
     	 
+    	 System.out.println("ca part de la ");
+    	 
  			for (int b = 0; b < c.size(); b++) {
+ 				
+ 				System.out.println(b);
  				
  				if (c.get(b) != 1) {
  					
+ 					System.out.println("fooooollllleee");
  					return false;
  					
  				}
