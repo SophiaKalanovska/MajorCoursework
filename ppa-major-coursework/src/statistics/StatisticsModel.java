@@ -106,8 +106,6 @@ public class StatisticsModel {
 		}
 	
 
-	
-	
 	public void setShape(String from, String to) {
 		if (from != null && to != null) {
 			data = ripley.getIncidentsInRange(from, to);
@@ -127,6 +125,9 @@ public class StatisticsModel {
 						}
 					}
 				}
+				if (max == 1){
+					likeshape = "All equally likely";
+				}
 				if (hashshape.size() != 0) {
 					likeshape = getKeysByValue(hashshape, max);
 				} else {
@@ -134,6 +135,7 @@ public class StatisticsModel {
 				}
 			}
 		}
+
 
 	
 	public static <T, E> String getKeysByValue(Map<T, E> map, E value) {
