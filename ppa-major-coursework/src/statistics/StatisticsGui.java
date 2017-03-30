@@ -1,107 +1,79 @@
+
 package statistics;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import java.awt.Dimension;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import api.ripley.Ripley;
 
-public class StatisticsGui {
-	
-	private JPanel statistics;
-	private JTextArea hoaxesjtaMessage;
-	private JButton hoaxesright;
-	private JButton hoaxesleft;
-	private JLabel hoaxeslabel;
-	
-	private JTextArea nonUSjtaMessage;
-	private JButton nonUSright;
-	private JButton nonUSleft;
-	private JLabel nonUSlabel;
-	
-	private JTextArea likeliestjtaMessage;
-	private JButton likeliestright;
-	private JButton likeliestleft;
-	private JLabel likeliestlabel;
-	
-	private JTextArea otherjtaMessage;
-	private JButton otherright;
-	private JButton otherleft;
-	private JLabel otherlabel;
-	
-	
-	
-	public StatisticsGui(){
-		hoaxesright = new JButton(">");
-		hoaxesleft = new JButton("<");
-		hoaxeslabel = new JLabel("<html> Hoaxes </html>");
-		hoaxesjtaMessage = new JTextArea();
-		
-		nonUSright = new JButton(">");
-		nonUSleft = new JButton("<");
-		nonUSlabel = new JLabel("<html> Non-US Sightings </html>");
-		nonUSjtaMessage = new JTextArea();
-		
-		likeliestright = new JButton(">");
-		likeliestleft = new JButton("<");
-		likeliestlabel = new JLabel("<html> Likeliest State </html>");
-		likeliestjtaMessage = new JTextArea();
-		
-		otherright = new JButton(">");
-		otherleft = new JButton("<");
-		otherlabel = new JLabel("<html> Sightings via other platforms </html>");
-		otherjtaMessage = new JTextArea();
-			
-		JPanel jpWest1 = new JPanel();
-		jpWest1.setLayout(new BorderLayout());
-		jpWest1.add(hoaxesleft, BorderLayout.WEST);
-		jpWest1.add(hoaxesright, BorderLayout.EAST);
-		jpWest1.add(hoaxesjtaMessage, BorderLayout.CENTER);
-		jpWest1.add(hoaxeslabel, BorderLayout.SOUTH);
-		
-		JPanel jpEast1 = new JPanel();
-		jpWest1.setLayout(new BorderLayout());
-		jpWest1.add(nonUSleft, BorderLayout.WEST);
-		jpWest1.add(nonUSright, BorderLayout.EAST);
-		jpWest1.add(nonUSjtaMessage, BorderLayout.CENTER);
-		jpWest1.add(nonUSlabel, BorderLayout.SOUTH);
-		
-		JPanel jpWest2 = new JPanel();
-		jpWest1.setLayout(new BorderLayout());
-		jpWest1.add(likeliestleft, BorderLayout.WEST);
-		jpWest1.add(likeliestright, BorderLayout.EAST);
-		jpWest1.add(likeliestjtaMessage, BorderLayout.CENTER);
-		jpWest1.add(likeliestlabel, BorderLayout.SOUTH);
-		
-		JPanel jpEast2 = new JPanel();
-		jpWest1.setLayout(new BorderLayout());
-		jpWest1.add(otherleft, BorderLayout.WEST);
-		jpWest1.add(otherright, BorderLayout.EAST);
-		jpWest1.add(otherjtaMessage, BorderLayout.CENTER);
-		jpWest1.add(otherlabel, BorderLayout.SOUTH);
-				
-		statistics = new JPanel();
-		statistics.setLayout(new GridLayout(2,2));
-		statistics.add(jpWest1);
-		statistics.add(jpEast1);
-		statistics.add(jpWest2);
-		statistics.add(jpEast2);
-			
-		//Number of hoaxes
-		//nonUS Sightings
-		//likeliest State
-		//Sightings via other platforms
-			
+public class StatisticsGui extends JPanel {
+	private StatisticsModel statisticsModel;
+	private SingleStatistic[] FourStatistics;
+	private String[] stats;
+	private Ripley ripley;
+
+	public StatisticsGui(Ripley ripley) {
+		super();
+		this.ripley = ripley;
+		FourStatistics = new SingleStatistic[4];
+		stats = new String[4];
+		initWidgets();
 	}
-	
-	public JPanel getStatisticsPanel(){
-		return statistics;		
+
+	public void initWidgets() {
+		setLayout(new GridLayout(2, 2));
+		statisticsModel = new StatisticsModel(ripley);
+		for (int i = 0; i < FourStatistics.length; i++) {
+			FourStatistics[i] = new SingleStatistic(statisticsModel);
+			FourStatistics[i].setPreferredSize(new Dimension(375, 250));
+			add(FourStatistics[i]);
+		}
+		setDefaultSubPanels();
+		try {
+			initStats();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
-	
+
+	public void initStats() throws NumberFormatException, Exception {
+		FourStatistics[0].resetDsiplayStats();
+		for (int i = 0; i < FourStatistics.length; i++) {
+			FourStatistics[i].initializeStat(Integer.parseInt(stats[i]));
+		}
+	}
+
+	private void setDefaultSubPanels() {
+		for (int i = 0; i < FourStatistics.length; i++) {
+			stats[i] = i + 1 + "";
+		}
+	}
+
+	public void update(String from, String to) {
+
+		from = from + "-01-01 00:00:00";
+		to = to + "-12-31 00:00:00";
+
+		statisticsModel.setHoaxes(from, to);
+		statisticsModel.setNonUS(from, to);
+		statisticsModel.setLikely(from, to);
+		statisticsModel.setShape(from, to);
+		try {
+			StatisticsModel.getHTML();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		for (int i = 0; i < FourStatistics.length; i++) {
+			try {
+				FourStatistics[i].updateStatistic(FourStatistics[i].getStat());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
 	}
 
-
+}
