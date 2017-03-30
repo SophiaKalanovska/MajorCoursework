@@ -304,8 +304,6 @@ public class StatisticsModel {
  				
  				for (String key : unique) {
  					
- 					 System.out.println(key + ": " + Collections.frequency(city, key));
- 					
  					if (Collections.frequency(city, key) == 1 && data.size() > 1) {
  						
  						currentCity = "Not enough data";
@@ -378,6 +376,8 @@ public class StatisticsModel {
 	
 	public String getCurrentCity() {
 		
+		System.out.println("connasse");
+		System.out.println(currentCity);
 		return currentCity;
 		
 	}
