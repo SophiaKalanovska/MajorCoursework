@@ -58,7 +58,6 @@ public class StatisticsModel {
 				}
 
 			}
-			System.out.println("number of hoaxes is" + numberOfHoax);
 		}
 	}
 
