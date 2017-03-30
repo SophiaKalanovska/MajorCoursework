@@ -244,6 +244,7 @@ public class View extends JFrame implements Observer {
 			updateWelcomePanel(getJcbFrom(), getJcbTo());
 
      		grabData(getJcbFrom(), getJcbTo());
+     		
 			
 			System.out.println("Update View");
 			

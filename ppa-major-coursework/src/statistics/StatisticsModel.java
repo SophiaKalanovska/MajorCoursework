@@ -101,6 +101,53 @@ public class StatisticsModel {
 			}
 		}
 	}
+	
+	public String likeliestTime(String from, String to) {
+		
+		
+		
+		data = ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
+		
+		double conversionTime = (100.0/60.0);
+
+		int averageHour = 0;
+		float averageMinute = 0;
+		
+		if (data.isEmpty()) {
+			
+			System.out.println("sef le bg");
+			
+			return "No data";
+			
+		} else {
+			
+			System.out.println("sefthi le bg");
+			
+			for (int i = 0; i < data.size(); i++) {
+				
+			//	System.out.println(data.get(i).getDateAndTime().substring(11, 13));
+			//	System.out.println(data.get(i).getDateAndTime().substring(14, 16));
+				System.out.println(data.get(i).getDateAndTime().substring(11, 16));
+				
+				averageHour += Integer.parseInt(data.get(i).getDateAndTime().substring(11, 13));
+				averageMinute += ((Float.parseFloat(data.get(i).getDateAndTime().substring(14, 16))));
+				
+			}
+			
+			
+		}
+		
+		System.out.println(averageMinute * (100/60));
+		System.out.println(averageMinute);
+		
+		averageMinute *= conversionTime;
+		
+		System.out.println("Average hour: " + averageHour / data.size());
+		System.out.println("Average minutes: " + averageMinute / data.size());
+		
+		return "pute";
+		
+	}
 
 	public static <T, E> String getKeysByValue(Map<T, E> map, E value) {
 		Set<T> keys = new HashSet<T>();

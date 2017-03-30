@@ -212,6 +212,7 @@ public class StatisticsGui extends JPanel {
 		
 		statisticsModel.setPanels(nonUSjtaMessage, hoaxesjtaMessage, from, to);
 		statisticsModel.setlikely(likeliestjtaMessage, from, to);
+		statisticsModel.likeliestTime(from, to);
 
 		
 	}
