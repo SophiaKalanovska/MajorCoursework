@@ -1,6 +1,12 @@
 package statistics;
 
 import java.awt.GridLayout;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import api.ripley.Ripley;
@@ -10,10 +16,14 @@ public class StatisticsGui extends JPanel {
 	private SingleStatistic[] FourStatistics;
 	private String[] stats;
 	private Ripley ripley;
+	private BufferedWriter writeInFile;
+	private BufferedReader readFromFile;
+	private static String savePath;
 
 	public StatisticsGui(Ripley ripley) {
 		super();
 		this.ripley = ripley;
+		savePath = "Saving the path";
 		FourStatistics = new SingleStatistic[4];
 		stats = new String[4];
 		initWidgets();
@@ -23,11 +33,11 @@ public class StatisticsGui extends JPanel {
 		setLayout(new GridLayout(2, 2));
 		statisticsModel = new StatisticsModel(ripley);
 		for (int i = 0; i < FourStatistics.length; i++) {
-			FourStatistics[i] = new SingleStatistic(statisticsModel);
+			FourStatistics[i] = new SingleStatistic(statisticsModel, this);
 			FourStatistics[i].setPreferredSize(new Dimension(375, 250));
 			add(FourStatistics[i]);
 		}
-		setDefaultSubPanels();
+		readFromFile();
 		try {
 			initStats();
 		} catch (NumberFormatException e) {
@@ -44,9 +54,38 @@ public class StatisticsGui extends JPanel {
 		}
 	}
 
-	private void setDefaultSubPanels() {
+	private void setDefaultFourPanels() {
 		for (int i = 0; i < FourStatistics.length; i++) {
 			stats[i] = i + 1 + "";
+		}
+	}
+	
+	public void panelSave() {
+		String retString = "";
+		for (int i = 0; i < FourStatistics.length; i++) {
+			retString += FourStatistics[i].getStat() + " ";
+		}
+
+		try {
+			writeInFile = new BufferedWriter(new FileWriter(savePath));
+			writeInFile.write(retString);
+			writeInFile.flush();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	private void readFromFile() {
+		try {
+			readFromFile = new BufferedReader(new FileReader(savePath));
+			String line = readFromFile.readLine();
+			if (!line.isEmpty()) {
+				stats = line.split(" ");
+			} else {
+				setDefaultFourPanels();
+			}
+		} catch (IOException e) {
+			setDefaultFourPanels();
 		}
 	}
 
