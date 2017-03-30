@@ -68,20 +68,19 @@ public class View extends JFrame implements Observer {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		index = 0;
-		welcome = new WelcomePanel();
-        stat = new StatisticsGui(jcbFrom, jcbTo, ripley);
-        map = new MapPanel(ripley);
-        model = new Model();
-		model.addObserver(this);
-		initWidgets();
-		
-		
-		
-		
-		setMinimumSize(new Dimension(800, 600));
+		//need to set some sort of layout manager
+		setPreferredSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
+		
+        welcome = new WelcomePanel();
+		
+		model = new Model();
+		model.addObserver(this);
+		
+		index = 0;
+		map = new MapPanel(ripley);
+		initWidgets();
 		
 	}
 	
@@ -182,6 +181,7 @@ public class View extends JFrame implements Observer {
 		this.add(jpCenter, BorderLayout.CENTER);
 		this.add(jpBottom, BorderLayout.SOUTH);
 		
+		stat = new StatisticsGui(getJcbFrom(), getJcbTo(), ripley);
 		
 		panelList.add(welcome);
 		panelList.add(stat);
@@ -221,8 +221,7 @@ public class View extends JFrame implements Observer {
 		System.out.println("hello");
 		welcome.grabData(from, to);
 		map.setCanvas(new MapCanvas(ripley, from, to));
-		jpCenter.validate();
-		
+		stat.init(getJcbFrom(), getJcbTo());
 		
 	}
 	
@@ -265,24 +264,15 @@ public class View extends JFrame implements Observer {
 				
 				System.out.println("Left clicked");
 				
-				System.out.println(index);
 				--index;
-				System.out.println(index);
 				jpCenter.remove(currentPanel);
 				currentPanel = panelList.get(index);
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				if (index == 2) {
-					pack();
-					setResizable(false);
-				} else {
-					pack();
-					setResizable(true);
-				}
 				jpCenter.revalidate();
 				jpCenter.repaint();
 				
 			}
-			setLocationRelativeTo(null);
+
 		}
 		
 		if (arg1.equals("Right")) {
@@ -303,25 +293,13 @@ public class View extends JFrame implements Observer {
 				jpCenter.remove(currentPanel);
 				index++;
 				currentPanel = panelList.get(index);
-				System.out.println(index);
-				//index++;
-				System.out.println(index);
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				if (index == 2) {
-					pack();
-					setResizable(false);
-				} else {
-					pack();
-					setResizable(true);
-				}
 				jpCenter.revalidate();
 				jpCenter.repaint();
 				
 			}
 
 		}	
-		
-		setLocationRelativeTo(null);
 		
 	}
 	
