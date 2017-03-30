@@ -129,19 +129,20 @@ public class StatisticsGui extends JPanel {
 		nonUSlabel = new JLabel("Non-US Sightings", SwingConstants.CENTER);
 		nonUSjtaMessage = new JTextPane();
 		nonUSjtaMessage.setBackground(null);
-
+        
 		likeliestright = new JButton(">");
 		likeliestleft = new JButton("<");
 		likeliestlabel = new JLabel("Likeliest State", SwingConstants.CENTER);
 		likeliestjtaMessage = new JTextPane();
 		likeliestjtaMessage.setBackground(null);
-
+        
 		otherright = new JButton(">");
 		otherleft = new JButton("<");
 		otherlabel = new JLabel("Sightings via other platforms", SwingConstants.CENTER);
 		otherjtaMessage = new JTextPane();
 		otherjtaMessage.setBackground(null);
-
+		otherjtaMessage.setEditable(false);
+        
 		jpWest1 = new JPanel();
 		jpWest1.setLayout(new BorderLayout());
 		jpWest1.setMinimumSize(new Dimension(15,15));
@@ -153,7 +154,7 @@ public class StatisticsGui extends JPanel {
         jpHoaxes.add(hoaxesjtaMessage, gbc1);
 		jpWest1.add(jpHoaxes, BorderLayout.CENTER);
 		jpWest1.add(hoaxeslabel, BorderLayout.NORTH);
-
+        
 		jpEast1 = new JPanel();
 		jpEast1.setLayout(new BorderLayout());
 		jpEast1.setMinimumSize(new Dimension(15,15));

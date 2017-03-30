@@ -116,12 +116,18 @@ public class WelcomePanel extends JPanel implements Observer{
 	    	
 	    }   
 	    
+	    String acknowledgement1 = ripley.getAcknowledgementString().substring(0, 72);
+	    String acknowledgement2 = ripley.getAcknowledgementString().substring(72, ripley.getAcknowledgementString().length());
 	    
 		String data = ("<html> <br><br><br><br><br><br> Welcome to the Ripley API v" + ripley.getVersion() + 
 				"<br> Please select from the dates above, in order to begin analysing UFO sighting data" +
 				"<br> <br> Date range selected: " + from + " - " + to + "." + "<br> <br>" + 
 				"Grabbing data... <br> <br>" +
-				" Data grabbed in " + time);
+				" Data grabbed in " + time + "<br><br>" 
+				+ "<strong> Please now interract with this data using the buttons to the left and the right</strong>"
+		        + "<br><br>"
+				+ acknowledgement1 + "<br>" 
+				+ acknowledgement2 + "<html>");
 		
 		
 		System.out.println("hellooooooooo");

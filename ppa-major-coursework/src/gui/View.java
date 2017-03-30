@@ -30,6 +30,7 @@ public class View extends JFrame implements Observer {
 	
 	JComboBox<String> jcbFrom;
 	JComboBox<String> jcbTo;
+	JButton jbGrab;
 	
 	JLabel jlFrom;
 	JLabel jlTo;
@@ -53,7 +54,12 @@ public class View extends JFrame implements Observer {
 	JPanel currentPanel;
 	int index;
 	
+	String fromm;
+	String too;
+	
 	Ripley ripley;
+	
+	
 
 	//Controller controller;
 	
@@ -142,7 +148,7 @@ public class View extends JFrame implements Observer {
 		jpCombBox.add(jlTo);
 		jpCombBox.add(jcbTo);
 		
-		JButton jbGrab = new JButton("Grab Data");
+		jbGrab = new JButton("Grab Data");
 		jpCombBox.add(jbGrab);
 		jbGrab.addActionListener(grabListener);
 		
@@ -219,7 +225,14 @@ public class View extends JFrame implements Observer {
 		
 		System.out.println("hello");
 		welcome.grabData(from, to);
+
 		map.setCanvas(new MapCanvas(ripley, from, to));
+		
+		fromm = getJcbFrom();
+		too = getJcbTo();
+
+		map.setCanvas(new MapCanvas(ripley, from, to));
+
 		stat.init(getJcbFrom(), getJcbTo());
 		
 	}
@@ -271,7 +284,24 @@ public class View extends JFrame implements Observer {
 				jpCenter.repaint();
 				
 			}
+			
+			if (index == 2) {
+				
+				this.setSize(new Dimension(930, 695));
+				
+			}
 
+		}
+		
+		
+		if (getJcbFrom().equals(fromm) && getJcbTo().equals(too)) {
+			
+			jbGrab.setEnabled(false);
+			
+		} else {
+			
+			jbGrab.setEnabled(true);
+			
 		}
 		
 		if (arg1.equals("Right")) {
@@ -297,30 +327,16 @@ public class View extends JFrame implements Observer {
 				jpCenter.repaint();
 				
 			}
+			
+            if (index == 2) {
+				
+				this.setSize(new Dimension(930, 695));
+				
+			}
+
 
 		}	
 		
 	}
-	
-	/*public static void main (String[] args) {	
-		
-		Model model = new Model();
-		
-		Controller controller = new Controller(model);
-		
-		View view = new View(controller);
-		
-		WelcomePanel welcome = new WelcomePanel();
-		
-		model.addObserver(view);
-		model.addObserver((Observer) welcome); 
-		
-		view.display();
-		
-		
-		//Ripley ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
-		//System.out.println(ripley.getLastUpdated());
-	}*/
-
 	
 }
