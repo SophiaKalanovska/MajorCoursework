@@ -59,6 +59,8 @@ public class StatisticsGui extends JPanel {
 		statisticsModel.setNonUS(from, to);
 		statisticsModel.setLikely(from, to);
 		statisticsModel.setShape(from, to);
+		statisticsModel.likeliestCity(from, to);
+		
 		try {
 			StatisticsModel.getHTML();
 		} catch (Exception e1) {
