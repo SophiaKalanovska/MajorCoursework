@@ -83,6 +83,8 @@ public class View extends JFrame implements Observer {
 
 		
         welcome = new WelcomePanel();
+        
+        stat = new StatisticsGui(ripley);
 		
 		model = new Model();
 		model.addObserver(this);
@@ -153,8 +155,6 @@ public class View extends JFrame implements Observer {
 		jpCombBox.add(jcbTo);
 		
 		
-		JButton jbGrab = new JButton("Grab Data");
-		
 		jbGrab = new JButton("Grab Data");
 
 		jpCombBox.add(jbGrab);
@@ -195,7 +195,6 @@ public class View extends JFrame implements Observer {
 		this.add(jpBottom, BorderLayout.SOUTH);
 		
 
-		//stat = new StatisticsGui(getJcbFrom(), getJcbTo(), ripley);
 		
 		panelList.add(welcome);
 		panelList.add(stat);
