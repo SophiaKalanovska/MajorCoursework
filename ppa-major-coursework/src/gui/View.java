@@ -69,7 +69,7 @@ public class View extends JFrame implements Observer {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//need to set some sort of layout manager
-		setPreferredSize(new Dimension(800, 600));
+		setMinimumSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
 		
@@ -270,6 +270,10 @@ public class View extends JFrame implements Observer {
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
 				jpCenter.revalidate();
 				jpCenter.repaint();
+				if (index == 2 || index == 1) { //invoked if going to/from map
+					pack();
+					setLocationRelativeTo(null);
+				}
 				
 			}
 
@@ -296,6 +300,10 @@ public class View extends JFrame implements Observer {
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
 				jpCenter.revalidate();
 				jpCenter.repaint();
+				if (index == 2 || index == 3) { //invoked if going to/from map
+					pack();
+					setLocationRelativeTo(null);
+				}
 				
 			}
 
