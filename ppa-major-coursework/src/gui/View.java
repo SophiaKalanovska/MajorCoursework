@@ -248,7 +248,9 @@ public class View extends JFrame implements Observer {
 		map.setCanvas(new MapCanvas(ripley, from, to));
 
 		stat.update(from,to);
+
 		//game.update(from,to);
+
 		
 	}
 
