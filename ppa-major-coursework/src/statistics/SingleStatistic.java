@@ -136,8 +136,8 @@ public class SingleStatistic extends JLabel {
 			System.out.println("Common shape called");
 		} else if (i == 6) {
 			statisticNumber = 6;
-			topLabel.setText("Kelvin");
-			centerLabel.setText("");
+			topLabel.setText("Most likely time frame ");
+			centerLabel.setText(statisticsModel.getMostLikelySightingTimeFrame());
 		} else if (i == 7) {
 			statisticNumber = 7;
 			topLabel.setText("Nathan");

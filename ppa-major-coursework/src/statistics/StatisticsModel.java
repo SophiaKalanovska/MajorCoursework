@@ -34,6 +34,7 @@ public class StatisticsModel {
 	private String likeshape;
 	private ArrayList<String> shape;
 	// private Search search;
+	private String mostLikelySightingTimeFrame;
 
 	public StatisticsModel(Ripley ripley) {
 		this.ripley = ripley;
@@ -175,6 +176,65 @@ public class StatisticsModel {
 	      rd.close();
 	     // return result.toString();
 	   }
+	
+	public void getMostLikelyTime(String from, String to) {
+		if(from != null && to != null){
+			
+			int timeFrames[] = new int[8];
+			
+			ArrayList<Incident> allIncidentsFromSelectedRange = ripley.getIncidentsInRange(from, to);
+						
+			Pattern twentyFourHourPattern = Pattern.compile("\\d\\d:\\d\\d:\\d\\d");
+			for(Incident i : allIncidentsFromSelectedRange){
+				Matcher twentyFourHourMatcher = twentyFourHourPattern.matcher(i.getDateAndTime());
+				
+				if(twentyFourHourMatcher.find()){
+					
+					String time = twentyFourHourMatcher.group(0).substring(0, 5);
+						
+					String newTime = time.substring(0, 2);
+					int newTimeInt = Integer.parseInt(newTime);
+					
+					if(newTimeInt >= 00 && newTimeInt <= 03) timeFrames[0]++;     //00-03;
+					else if(newTimeInt >= 3 && newTimeInt < 6) timeFrames[1]++;   //03-06;
+					else if(newTimeInt >= 6 && newTimeInt < 9) timeFrames[2]++;   //06-09;
+					else if(newTimeInt >= 9 && newTimeInt < 12) timeFrames[3]++;  //09-12;
+					else if(newTimeInt >= 12 && newTimeInt < 15) timeFrames[4]++; //12-15;
+					else if(newTimeInt >= 15 && newTimeInt < 18) timeFrames[5]++; //15-18;
+					else if(newTimeInt >= 18 && newTimeInt < 21) timeFrames[6]++; //18-21;
+					else if(newTimeInt >= 21 && newTimeInt < 24) timeFrames[7]++; //21-00;
+				}
+			}
+			
+			int largest = 0;
+			int indexWithLargestSightings = 0;
+			for(int k = 0; k < timeFrames.length; k++){
+				if(timeFrames[k] > largest){
+					largest = timeFrames[k];
+					indexWithLargestSightings = k;
+				}
+			}
+			setMostLikelyTimeString(indexWithLargestSightings, timeFrames[indexWithLargestSightings]);
+		}
+	}
+	private void setMostLikelyTimeString(int index, int num){
+		if(num != 0){
+			if(index == 0) mostLikelySightingTimeFrame  = "<html><center>12 AM - 3 AM.</center><br> <center>  Number of reports: " + num+ "</center></html>";
+			else if(index == 1) mostLikelySightingTimeFrame  = "<html><center>3 AM - 6 AM.</center><br> <center> Number of reports: " + num+ "</center></html>";
+			else if(index == 2) mostLikelySightingTimeFrame  = "<html><center>6 AM - 9 AM.</center><br> <center>  Number of reports: " + num+ "</center></html>";
+			else if(index == 3) mostLikelySightingTimeFrame  = "<html><center>9 AM - 12 PM.</center><br> <center>  Number of reports: " + num+ "</center></html>";
+			else if(index == 4) mostLikelySightingTimeFrame  = "<html><center>12 PM - 3 PM.</center><br> <center>  Number of reports: " + num+ "</center></html>";
+			else if(index == 5) mostLikelySightingTimeFrame  = "<html><center>3 PM - 6 PM.</center><br> <center>  Number of reports: " + num+ "</center></html>";
+			else if(index == 6) mostLikelySightingTimeFrame  = "<html><center>6 PM - 9 PM.</center><br> <center> Number of reports: " + num+ "</center></html>";
+			else if(index == 7) mostLikelySightingTimeFrame  = "<html><center>9 PM - 12 AM.</center><br> <center> Number of reports: " + num + "</center></html>";
+		} else {
+			mostLikelySightingTimeFrame = "No Data";
+		}
+	}
+	
+	public String getMostLikelySightingTimeFrame() {
+		return mostLikelySightingTimeFrame;
+	}
 	
 
 	public static String getTotalResults() {
