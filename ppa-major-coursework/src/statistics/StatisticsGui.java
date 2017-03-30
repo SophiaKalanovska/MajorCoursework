@@ -1,4 +1,3 @@
-
 package statistics;
 
 import java.awt.GridLayout;
@@ -73,7 +72,6 @@ public class StatisticsGui extends JPanel {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 }

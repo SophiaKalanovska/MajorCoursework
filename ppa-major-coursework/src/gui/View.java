@@ -31,6 +31,8 @@ public class View extends JFrame implements Observer {
 	JComboBox<String> jcbFrom;
 	JComboBox<String> jcbTo;
 	
+	JButton jbGrab;
+	
 	JLabel jlFrom;
 	JLabel jlTo;
 	
@@ -53,7 +55,12 @@ public class View extends JFrame implements Observer {
 	JPanel currentPanel;
 	int index;
 	
+	String fromm;
+	String too;
+	
 	Ripley ripley;
+	
+	
 
 	//Controller controller;
 	
@@ -68,36 +75,21 @@ public class View extends JFrame implements Observer {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		index = 0;
-		welcome = new WelcomePanel();
-        stat = new StatisticsGui(ripley);
-        map = new MapPanel(ripley);
-        model = new Model();
-		model.addObserver(this);
-		initWidgets();
-		
-		
-		
-		
-		setMinimumSize(new Dimension(800, 600));
-		
-		index = 0;
-		welcome = new WelcomePanel();
-        stat = new StatisticsGui(ripley);
 
-        stat = new StatisticsGui(ripley);
-
-        map = new MapPanel(ripley);
-        model = new Model();
-		model.addObserver(this);
-		initWidgets();
-		
-		
-		
-		
-		setMinimumSize(new Dimension(800, 600));
+		//need to set some sort of layout manager
+		setPreferredSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
+
+		
+        welcome = new WelcomePanel();
+		
+		model = new Model();
+		model.addObserver(this);
+		
+		index = 0;
+		map = new MapPanel(ripley);
+		initWidgets();
 		
 	}
 	
@@ -160,7 +152,11 @@ public class View extends JFrame implements Observer {
 		jpCombBox.add(jlTo);
 		jpCombBox.add(jcbTo);
 		
+		
 		JButton jbGrab = new JButton("Grab Data");
+		
+		jbGrab = new JButton("Grab Data");
+
 		jpCombBox.add(jbGrab);
 		jbGrab.addActionListener(grabListener);
 		
@@ -198,6 +194,8 @@ public class View extends JFrame implements Observer {
 		this.add(jpCenter, BorderLayout.CENTER);
 		this.add(jpBottom, BorderLayout.SOUTH);
 		
+
+		//stat = new StatisticsGui(getJcbFrom(), getJcbTo(), ripley);
 		
 		panelList.add(welcome);
 		panelList.add(stat);
@@ -236,16 +234,22 @@ public class View extends JFrame implements Observer {
 		
 		System.out.println("hello");
 		welcome.grabData(from, to);
+
 		map.setCanvas(new MapCanvas(ripley, from, to));
-		stat.update(from, to);
 		
+		fromm = getJcbFrom();
+		too = getJcbTo();
+
+		map.setCanvas(new MapCanvas(ripley, from, to));
+
+		stat.update(from,to);
 		
 	}
 	
 	public void update(Observable arg0, Object arg1) {
 		
 		Model model = (Model) arg0;
-		
+
 		if (arg1.equals("Grab Data")) {
 			
 			updateWelcomePanel(getJcbFrom(), getJcbTo());
@@ -281,24 +285,32 @@ public class View extends JFrame implements Observer {
 				
 				System.out.println("Left clicked");
 				
-				System.out.println(index);
 				--index;
-				System.out.println(index);
 				jpCenter.remove(currentPanel);
 				currentPanel = panelList.get(index);
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				if (index == 2) {
-					pack();
-					setResizable(false);
-				} else {
-					pack();
-					setResizable(true);
-				}
 				jpCenter.revalidate();
 				jpCenter.repaint();
 				
 			}
+			
+			if (index == 2) {
+				
+				this.setSize(new Dimension(930, 695));
+				
+			}
 
+		}
+		
+		
+		if (getJcbFrom().equals(fromm) && getJcbTo().equals(too)) {
+			
+			jbGrab.setEnabled(false);
+			
+		} else {
+			
+			jbGrab.setEnabled(true);
+			
 		}
 		
 		if (arg1.equals("Right")) {
@@ -319,47 +331,21 @@ public class View extends JFrame implements Observer {
 				jpCenter.remove(currentPanel);
 				index++;
 				currentPanel = panelList.get(index);
-				System.out.println(index);
-				//index++;
-				System.out.println(index);
 				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				if (index == 2) {
-					pack();
-					setResizable(false);
-				} else {
-					pack();
-					setResizable(true);
-				}
 				jpCenter.revalidate();
 				jpCenter.repaint();
 				
 			}
+			
+            if (index == 2) {
+				
+				this.setSize(new Dimension(930, 695));
+				
+			}
+
 
 		}	
 		
 	}
-	
-	
-	
-	/*public static void main (String[] args) {	
-		
-		Model model = new Model();
-		
-		Controller controller = new Controller(model);
-		
-		View view = new View(controller);
-		
-		WelcomePanel welcome = new WelcomePanel();
-		
-		model.addObserver(view);
-		model.addObserver((Observer) welcome); 
-		
-		view.display();
-		
-		
-		//Ripley ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
-		//System.out.println(ripley.getLastUpdated());
-	}*/
-
 	
 }
