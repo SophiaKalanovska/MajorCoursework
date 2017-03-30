@@ -289,7 +289,7 @@ public class StatisticsModel {
  		
  		if (data.isEmpty()) {
  			
- 			System.out.println("sef le bg");
+ 	//		System.out.println("sef le bg");
  			
  			return "No data";
  			
@@ -300,7 +300,7 @@ public class StatisticsModel {
  			for (int i = 0; i < data.size(); i++) {
  				
 
- 				System.out.println(data.get(i).getCity());
+ 			//	System.out.println(data.get(i).getCity());
  				
  				for (String key : unique) {
  					
@@ -314,8 +314,8 @@ public class StatisticsModel {
  		 			    	
  		 			    	current = Collections.frequency(city, key);
  		 			    	currentCity = key;
- 		 			    	System.out.println("current: " + current);
- 		 			    	System.out.println("Current city: " + currentCity);
+ 		 			  //  	System.out.println("current: " + current);
+ 		 			  //  	System.out.println("Current city: " + currentCity);
  		 			    	
  		 			    }
  						
