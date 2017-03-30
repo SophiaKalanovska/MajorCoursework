@@ -35,11 +35,12 @@ public class MapCanvas extends JSVGCanvas {
 	public MapCanvas(Ripley ripley, String fromYear, String toYear) {
 		this();
 		this.ripley = ripley;
-		AlienIconManager placePins = new AlienIconManager(ripley, fromYear, toYear);
-		JLabel[] pins = placePins.getAllPins();
+		AlienIconManager pinGenerator = new AlienIconManager(ripley, fromYear, toYear);
+		AlienPin[] pins = pinGenerator.getAllPins();
 		for (int i=0; i<pins.length; i++) {
 			if (pins[i] != null) {
 				add(pins[i]);
+				pins[i].addMouseListener(new PinClickListener());
 			}
 		}
 	}

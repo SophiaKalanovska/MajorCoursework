@@ -221,6 +221,7 @@ public class View extends JFrame implements Observer {
 		System.out.println("hello");
 		welcome.grabData(from, to);
 		map.setCanvas(new MapCanvas(ripley, from, to));
+		jpCenter.validate();
 		
 		
 	}
@@ -281,7 +282,7 @@ public class View extends JFrame implements Observer {
 				jpCenter.repaint();
 				
 			}
-
+			setLocationRelativeTo(null);
 		}
 		
 		if (arg1.equals("Right")) {
@@ -319,6 +320,8 @@ public class View extends JFrame implements Observer {
 			}
 
 		}	
+		
+		setLocationRelativeTo(null);
 		
 	}
 	
