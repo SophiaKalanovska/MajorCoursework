@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -102,7 +103,7 @@ public class StatisticsModel {
 		}
 	}
 	
-	public String likeliestTime(String from, String to) {
+/*	public String likeliestTime(String from, String to) {
 		
 		
 		
@@ -147,7 +148,50 @@ public class StatisticsModel {
 		
 		return "pute";
 		
+	} */
+	
+	
+	public String likeliestTime(String from, String to) {
+		
+		data = ripley.getIncidentsInRange(from + "-01-01 00:00:00", to + "-01-01 00:00:00");
+		List<String> time = new ArrayList<String>();
+		
+		for (int i= 0; i < data.size(); i++) {
+			
+			time.add(data.get(i).getDateAndTime().substring(11, 16));
+			
+		}
+        
+		Set<String> unique = new HashSet<String>(time);
+
+		
+		if (data.isEmpty()) {
+			
+			System.out.println("sef le bg");
+			
+			return "No data";
+			
+		} else {
+			
+			System.out.println("sefthi le bg");
+			
+			for (int i = 0; i < data.size(); i++) {
+
+				System.out.println(data.get(i).getDateAndTime().substring(11, 16));
+
+			}
+			
+			for (String key : unique) {
+			    System.out.println(key + ": " + Collections.frequency(time, key));
+			}
+			
+			
+		}
+		
+		return "pute";
+		
 	}
+
 
 	public static <T, E> String getKeysByValue(Map<T, E> map, E value) {
 		Set<T> keys = new HashSet<T>();
