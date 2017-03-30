@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import controller.RightListener;
 import map.MapCanvas;
 import map.MapPanel;
 import statistics.StatisticsGui;
+import surpise_panel.view.Game;
 
 
 public class View extends JFrame implements Observer {
@@ -50,9 +52,12 @@ public class View extends JFrame implements Observer {
 	WelcomePanel welcome;
 	StatisticsGui stat;
 	MapPanel map;
+	Game game;
 
+	//ArrayList<Object> panelList = new ArrayList<Object>();
 	ArrayList<JPanel> panelList = new ArrayList<JPanel>();
 	JPanel currentPanel;
+	Game currentCanvas;
 	int index;
 	
 	String fromm;
@@ -91,6 +96,7 @@ public class View extends JFrame implements Observer {
 		
 		index = 0;
 		map = new MapPanel(ripley);
+		//game = new Game(ripley);
 		initWidgets();
 		
 	}
@@ -199,7 +205,7 @@ public class View extends JFrame implements Observer {
 		panelList.add(welcome);
 		panelList.add(stat);
 		panelList.add(map);
-		panelList.add(test3);
+		//panelList.add(game);
 		
 	}
 	
@@ -242,9 +248,10 @@ public class View extends JFrame implements Observer {
 		map.setCanvas(new MapCanvas(ripley, from, to));
 
 		stat.update(from,to);
+		//game.update(from,to);
 		
 	}
-	
+
 	public void update(Observable arg0, Object arg1) {
 		
 		Model model = (Model) arg0;
@@ -268,83 +275,65 @@ public class View extends JFrame implements Observer {
 			
 		}
 
-
+//######### LEFT BUTTON CLICKED #########
 		if (arg1.equals("Left")) {
-			
+			removeCorrectState();
 			if (index == 0) {
-				
 				index = 3;
-				jpCenter.remove(currentPanel);
-				currentPanel = panelList.get(index);
-				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				jpCenter.revalidate();
-				jpCenter.repaint();
-				
+				addGame();
 			} else if (index > 0) {
-				
-				System.out.println("Left clicked");
-				
 				--index;
-				jpCenter.remove(currentPanel);
-				currentPanel = panelList.get(index);
-				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				jpCenter.revalidate();
-				jpCenter.repaint();
-				
+				if(index == 3) addGame();
+				else addPanel();
 			}
-			
-			if (index == 2) {
-				
-				this.setSize(new Dimension(930, 695));
-				
-			}
-
 		}
 		
+//######### ENABLE / DISABLE LEFT + RIGHT BUTTONS ########
+		if (getJcbFrom().equals(fromm) && getJcbTo().equals(too)) jbGrab.setEnabled(false);
+		else jbGrab.setEnabled(true);
 		
-		if (getJcbFrom().equals(fromm) && getJcbTo().equals(too)) {
-			
-			jbGrab.setEnabled(false);
-			
-		} else {
-			
-			jbGrab.setEnabled(true);
-			
-		}
-		
+//######### RIGHT BUTTON CLICKED #########
 		if (arg1.equals("Right")) {
-			
+			removeCorrectState();
 			if (index == 3) {
-				
 				index = 0;
-				jpCenter.remove(currentPanel);
-				currentPanel = panelList.get(index);
-				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				jpCenter.revalidate();
-				jpCenter.repaint();
-				
+				addPanel();
 			} else {
-				
-                System.out.println("Right clicked");
-				
-				jpCenter.remove(currentPanel);
 				index++;
-				currentPanel = panelList.get(index);
-				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				jpCenter.revalidate();
-				jpCenter.repaint();
-				
+				if(index == 3) addGame();
+				else addPanel();
 			}
-			
-            if (index == 2) {
-				
-				this.setSize(new Dimension(930, 695));
-				
-			}
-
-
 		}	
-		
 	}
 	
+	private void addGame() {
+		currentPanel = null;
+		this.remove(jpCenter);
+		game = new Game(fromm, too);
+		currentCanvas = game;
+		this.add(currentCanvas, BorderLayout.CENTER);
+		this.revalidate();
+		this.repaint();
+		game.start();
+	}
+	
+	private void addPanel(){
+		currentPanel = panelList.get(index);
+		jpCenter.add(currentPanel, BorderLayout.CENTER);
+		jpCenter.revalidate();
+		jpCenter.repaint();
+		if (index == 2) {
+			this.setSize(new Dimension(930, 695));
+		}
+	}
+	
+	private void removeCorrectState() {
+		if(currentPanel != null){
+			jpCenter.remove(currentPanel);
+		} else {
+			currentCanvas.stop();
+			this.remove(currentCanvas);
+			this.add(jpCenter, BorderLayout.CENTER);
+		}
+	}
 }
