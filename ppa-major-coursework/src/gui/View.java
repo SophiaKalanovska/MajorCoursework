@@ -71,11 +71,13 @@ public class View extends JFrame implements Observer {
 		
 		ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
 		
+		System.out.println(ripley.getAcknowledgementString());
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 
-		//need to set some sort of layout manager
-		setPreferredSize(new Dimension(800, 600));
+		
+		setMinimumSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
 
@@ -240,7 +242,9 @@ public class View extends JFrame implements Observer {
 		map.setCanvas(new MapCanvas(ripley, from, to));
 
 		stat.update(from,to);
+
 		//game.update(from,to);
+
 		
 	}
 
@@ -275,6 +279,7 @@ public class View extends JFrame implements Observer {
 				addGame();
 			} else if (index > 0) {
 				--index;
+
 				if(index == 3) addGame();
 				else addPanel();
 			}
@@ -320,6 +325,7 @@ public class View extends JFrame implements Observer {
 		this.add(currentCanvas, BorderLayout.CENTER);
 		this.revalidate();
 		this.repaint();
+		setLocationRelativeTo(null); //just centring the frame when it resizes
 		game.start();
 	}
 	
@@ -329,10 +335,12 @@ public class View extends JFrame implements Observer {
 		jpCenter.revalidate();
 		jpCenter.repaint();
 		if (index == 2) {
-			this.setSize(new Dimension(930, 695));
+			//this.setSize(new Dimension(930, 695));
+			pack();
 		}else {
 			this.setSize(new Dimension(800, 600));
 		}
+		setLocationRelativeTo(null); //centre
 	}
 	
 	private void removeCorrectState() {
@@ -342,6 +350,7 @@ public class View extends JFrame implements Observer {
 		} else {
 			currentCanvas.stop();
 			this.remove(currentCanvas);
+			currentCanvas = null;
 			this.add(jpCenter, BorderLayout.CENTER);
 		}
 	}

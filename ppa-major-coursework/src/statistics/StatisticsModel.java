@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -33,6 +34,10 @@ public class StatisticsModel {
 	private String like;
 	private String likeshape;
 	private ArrayList<String> shape;
+	private int longestDuration;
+	
+	
+	private String currentCity;
 	// private Search search;
 	private String mostLikelySightingTimeFrame;
 
@@ -43,6 +48,7 @@ public class StatisticsModel {
 		totalResults = "";
 		like = "";
 		likeshape = "";
+		currentCity = "";
 		hash = new HashMap<String, Integer>();
 		hashshape = new HashMap<String, Integer>();
 	}
@@ -52,7 +58,6 @@ public class StatisticsModel {
 		if (from != null && to != null) {
 			data = ripley.getIncidentsInRange(from, to);
 			for (int i = 0; i < data.size(); i++) {
-
 				if (data.get(i).getSummary().toUpperCase().contains("HOAX")) {
 					numberOfHoax += 1;
 				}
@@ -101,8 +106,25 @@ public class StatisticsModel {
 			}
 		}
 	
-
+	public void setLongestDuration(String from, String to) {
+		
+		ArrayList<String> duration = new ArrayList<String>();
+		for (int i = 0; i<data.size(); i++) {
+			Pattern num = Pattern.compile("/d*");
+			Matcher matcher = num.matcher(data.get(i).getDuration());
+			if (matcher.matches()) {
+				int durationCurrent = Integer.parseInt(matcher.group(1));
+				if (durationCurrent>longestDuration) {
+					longestDuration = durationCurrent;
+				}
+			}
+		}
+		
+	}
 	
+	public int getLongestDuration() {
+		return longestDuration;
+	}
 	
 	public void setShape(String from, String to) {
 		if (from != null && to != null) {
@@ -123,6 +145,9 @@ public class StatisticsModel {
 						}
 					}
 				}
+				if (max == 1){
+					likeshape = "All equally likely";
+				}
 				if (hashshape.size() != 0) {
 					likeshape = getKeysByValue(hashshape, max);
 				} else {
@@ -130,6 +155,7 @@ public class StatisticsModel {
 				}
 			}
 		}
+
 
 	
 	public static <T, E> String getKeysByValue(Map<T, E> map, E value) {
@@ -176,6 +202,8 @@ public class StatisticsModel {
 	     // return result.toString();
 	   }
 	
+
+
 	public void getMostLikelyTime(String from, String to) {
 		if(from != null && to != null){
 			
@@ -236,6 +264,137 @@ public class StatisticsModel {
 	}
 	
 
+
+	/*	
+		if (data.isEmpty()) {
+			
+			System.out.println("sef le bg");
+			
+			return "No data";
+			
+		} else {
+			
+			System.out.println("sefthi le bg");
+			
+			for (int i = 0; i < data.size(); i++) {
+
+				System.out.println(data.get(i).getDateAndTime().substring(11, 16));
+
+			}
+			
+			for (String key : unique) {
+			    System.out.println(key + ": " + Collections.frequency(time, key));
+			}
+			
+			
+		}
+		
+		return "pute";
+		
+	}*/
+     
+     public String likeliestCity(String from, String to) {
+ 		
+ 	data = ripley.getIncidentsInRange(from, to);
+ 		
+ 		List<String> city = new ArrayList<String>();
+ 		
+ 		ArrayList<Integer> count = new ArrayList<Integer>();
+ 		int current = 0;
+ 	//	String currentCity = "";
+ 		
+ 		for (int i= 0; i < data.size(); i++) {
+ 			
+ 			city.add(data.get(i).getCity());
+ 			
+ 		}
+         
+ 		Set<String> unique = new HashSet<String>(city);
+ 	
+ 		if (data.isEmpty()) {
+ 			
+		    System.out.println("sef le bg");
+ 			
+ 			return "No data";
+ 			
+ 		} else {
+ 			
+ 			System.out.println("sefthi le bg");
+ 			
+ 			for (int i = 0; i < data.size(); i++) {
+ 				
+
+ 			//	System.out.println(data.get(i).getCity());
+ 				
+ 				for (String key : unique) {
+ 					
+ 				//	System.out.println(key + ": " + Collections.frequency(city, key));
+ 					
+ 					if (Collections.frequency(city, key) == 1 && data.size() > 1) {
+ 						
+ 						count.add(Collections.frequency(city, key));
+ 						//System.out.println("COunt : " +count);
+ 						
+ 						//currentCity = "All cities are equally likely";
+ 						
+ 					} 
+ 						
+ 						if (Collections.frequency(city, key) > current) {
+ 		 			    	
+ 		 			    	current = Collections.frequency(city, key);
+ 		 			    	currentCity = key;
+ 		 			  //  	System.out.println("current: " + current);
+ 		 			  //  	System.out.println("Current city: " + currentCity);
+ 		 			    	
+ 		 			    }
+ 						
+ 						
+ 					
+ 					
+ 				}
+
+ 			}
+ 			
+ 			if (counting(count) && count.size() > 1) {
+ 				
+ 				
+ 				currentCity = "All cities had 1 occurence exactly";
+ 				
+ 			}
+ 			
+ 			
+
+ 			
+
+ 			System.out.println("GROSSE FOLLE : " + currentCity);
+ 			
+ 		} 
+ 		
+ 		return currentCity; 
+ 		
+ 	}
+     
+     public boolean counting(ArrayList<Integer> c) {
+    	 
+    	 System.out.println("ca part de la ");
+    	 
+ 			for (int b = 0; b < c.size(); b++) {
+ 				
+ 				System.out.println(b);
+ 				
+ 				if (c.get(b) != 1) {
+ 					
+ 					System.out.println("fooooollllleee");
+ 					return false;
+ 					
+ 				}
+ 				
+ 			}
+    	 
+    	 return true;
+    	 
+     }
+     
 	public static String getTotalResults() {
 		return totalResults;
 		
@@ -256,5 +415,15 @@ public class StatisticsModel {
 	public String getLikeshape() {
 		return likeshape;
 	}
+	
+	public String getCurrentCity() {
+		
+		System.out.println("connasse");
+		System.out.println(currentCity);
+		return currentCity;
+		
+	}
+	
+	
 
 }

@@ -1,6 +1,13 @@
 package statistics;
 
 import java.awt.GridLayout;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import api.ripley.Ripley;
@@ -10,10 +17,14 @@ public class StatisticsGui extends JPanel {
 	private SingleStatistic[] FourStatistics;
 	private String[] stats;
 	private Ripley ripley;
+	private BufferedWriter writeInFile;
+	private BufferedReader readFromFile;
+	private static String savePath;
 
 	public StatisticsGui(Ripley ripley) {
 		super();
 		this.ripley = ripley;
+		savePath = " ";
 		FourStatistics = new SingleStatistic[4];
 		stats = new String[4];
 		initWidgets();
@@ -23,18 +34,30 @@ public class StatisticsGui extends JPanel {
 		setLayout(new GridLayout(2, 2));
 		statisticsModel = new StatisticsModel(ripley);
 		for (int i = 0; i < FourStatistics.length; i++) {
-			FourStatistics[i] = new SingleStatistic(statisticsModel);
+
+			FourStatistics[i] = new SingleStatistic(statisticsModel, this);
 			FourStatistics[i].setPreferredSize(new Dimension(375, 250));
 			add(FourStatistics[i]);
 		}
-		setDefaultSubPanels();
-		try {
-			initStats();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		readFromFile();
+			
+
+			try {
+				initStats();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+
+			try {
+				initStats();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 	}
 
 	public void initStats() throws NumberFormatException, Exception {
@@ -42,14 +65,45 @@ public class StatisticsGui extends JPanel {
 		for (int i = 0; i < FourStatistics.length; i++) {
 			FourStatistics[i].initializeStat(Integer.parseInt(stats[i]));
 		}
-	}
 
-	private void setDefaultSubPanels() {
+	}
+	
+	private void setDefaultFourPanels() {
 		for (int i = 0; i < FourStatistics.length; i++) {
 			stats[i] = i + 1 + "";
 		}
 	}
+	
+	public void panelSave() {
+		String retString = "";
+		for (int i = 0; i < FourStatistics.length; i++) {
+			retString += FourStatistics[i].getStat() + " ";
+		}
 
+		try {
+			writeInFile = new BufferedWriter(new FileWriter(savePath));
+			writeInFile.write(retString);
+			writeInFile.flush();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+
+	private void readFromFile() {
+		try {
+			readFromFile = new BufferedReader(new FileReader(savePath));
+			String line = readFromFile.readLine();
+			if (!line.isEmpty()) {
+				stats = line.split(" ");
+			} else {
+				System.out.println("I am getting here");
+				setDefaultFourPanels();
+			}
+		} catch (IOException e) {
+			setDefaultFourPanels();
+		}
+	}
+	
 	public void update(String from, String to) {
 
 		from = from + "-01-01 00:00:00";
@@ -59,7 +113,10 @@ public class StatisticsGui extends JPanel {
 		statisticsModel.setNonUS(from, to);
 		statisticsModel.setLikely(from, to);
 		statisticsModel.setShape(from, to);
+		statisticsModel.setLongestDuration(from, to);
+		statisticsModel.likeliestCity(from, to);
 		statisticsModel.getMostLikelyTime(from, to);
+		
 		try {
 			StatisticsModel.getHTML();
 		} catch (Exception e1) {
@@ -74,5 +131,4 @@ public class StatisticsGui extends JPanel {
 			}
 		}
 	}
-
 }
