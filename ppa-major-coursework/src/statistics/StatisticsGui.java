@@ -1,234 +1,133 @@
 package statistics;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
-import api.ripley.Ripley;
-import java.util.Date;
+import java.awt.GridLayout;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.awt.Dimension;
+import javax.swing.JPanel;
+import api.ripley.Ripley;
 
 public class StatisticsGui extends JPanel {
-
-	
-	private JTextArea PlaceHolder;
-	
-	private JTextPane hoaxesjtaMessage;
-	private JButton hoaxesright;
-	private JButton hoaxesleft;
-	private JLabel hoaxeslabel;
-
-	private JTextPane nonUSjtaMessage;
-	private JButton nonUSright;
-	private JButton nonUSleft;
-	private JLabel nonUSlabel;
-
-	private JTextPane likeliestjtaMessage;
-	private JButton likeliestright;
-	private JButton likeliestleft;
-	private JLabel likeliestlabel;
-
-	private JTextPane otherjtaMessage;
-	private JButton otherright;
-	private JButton otherleft;
-	private JLabel otherlabel;
-
-	private JPanel jpEast1;
-	private JPanel jpWest1;
-	private JPanel jpEast2;
-	private JPanel jpWest2;
-
-
-	private String from;
-	private String to;
-	
 	private StatisticsModel statisticsModel;
+	private SingleStatistic[] FourStatistics;
+	private String[] stats;
+	private Ripley ripley;
+	private BufferedWriter writeInFile;
+	private BufferedReader readFromFile;
+	private static String savePath;
 
+	public StatisticsGui(Ripley ripley) {
+		super();
+		this.ripley = ripley;
+		savePath = " ";
+		FourStatistics = new SingleStatistic[4];
+		stats = new String[4];
+		initWidgets();
+	}
 
-	public StatisticsGui(String from, String to, Ripley ripley) {
-		
-		this.from = from;
-		this.to = to;
-		
+	public void initWidgets() {
+		setLayout(new GridLayout(2, 2));
 		statisticsModel = new StatisticsModel(ripley);
-		
-	/*	jcbFrom.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				if (jcbFrom.getSelectedItem() != null) {
+		for (int i = 0; i < FourStatistics.length; i++) {
 
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					setFrom((String) jcbFrom.getSelectedItem() + "-01-01 00:00:00");
-					try {
-						Date fromAsDate = df.parse(from);
-						setFrom(df.format(fromAsDate));
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-					statisticsModel.setPanels(nonUSjtaMessage, hoaxesjtaMessage, from, to);
-					statisticsModel.setlikely(likeliestjtaMessage, from, to);
-				}
+			FourStatistics[i] = new SingleStatistic(statisticsModel, this);
+			FourStatistics[i].setPreferredSize(new Dimension(375, 250));
+			add(FourStatistics[i]);
+		}
+		
+		readFromFile();
+			
+
+			try {
+				initStats();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});
-		
 		
 
-		jcbTo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				if (jcbTo.getSelectedItem() != null) {
-					DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					setTo((String) jcbTo.getSelectedItem() + "-12-31 00:00:00");
-					try {
-						Date toAsDate = df.parse(to);
-						setTo(df.format(toAsDate));
-					} catch (ParseException e) {
-						e.printStackTrace();
-					}
-					
-					statisticsModel.setPanels(nonUSjtaMessage, hoaxesjtaMessage, from, to);
-					statisticsModel.setlikely(likeliestjtaMessage, from, to);
-				}
-
+			try {
+				initStats();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});  */
 		
-//		DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//		setFrom((String) from + "-01-01 00:00:00");
-		
-		
-//		statisticsModel.setPanels(nonUSjtaMessage, hoaxesjtaMessage, from, to);
-//		statisticsModel.setlikely(likeliestjtaMessage, from, to);
+	}
 
-		this.setLayout(new BorderLayout());
-		JPanel jpNorth = new JPanel();
-		JPanel jpSouth = new JPanel();
-		this.add(jpNorth, BorderLayout.NORTH);
-		this.add(jpSouth, BorderLayout.SOUTH);
-
-
-		hoaxesright = new JButton(">");
-		hoaxesleft = new JButton("<");
-		hoaxeslabel = new JLabel(" Hoaxes", SwingConstants.CENTER);
-		hoaxesjtaMessage = new JTextPane();
-		hoaxesjtaMessage.setBackground(null);
-		
-		nonUSright = new JButton(">");
-		nonUSleft = new JButton("<");
-		nonUSlabel = new JLabel("Non-US Sightings", SwingConstants.CENTER);
-		nonUSjtaMessage = new JTextPane();
-		nonUSjtaMessage.setBackground(null);
-
-		likeliestright = new JButton(">");
-		likeliestleft = new JButton("<");
-		likeliestlabel = new JLabel("Likeliest State", SwingConstants.CENTER);
-		likeliestjtaMessage = new JTextPane();
-		likeliestjtaMessage.setBackground(null);
-
-		otherright = new JButton(">");
-		otherleft = new JButton("<");
-		otherlabel = new JLabel("Sightings via other platforms", SwingConstants.CENTER);
-		otherjtaMessage = new JTextPane();
-		otherjtaMessage.setBackground(null);
-
-		jpWest1 = new JPanel();
-		jpWest1.setLayout(new BorderLayout());
-		jpWest1.setMinimumSize(new Dimension(15,15));
-		jpWest1.add(hoaxesleft, BorderLayout.WEST);
-		jpWest1.add(hoaxesright, BorderLayout.EAST);
-		JPanel jpHoaxes = new JPanel();
-		jpHoaxes.setLayout(new GridBagLayout());
-        GridBagConstraints gbc1 = new GridBagConstraints();
-        jpHoaxes.add(hoaxesjtaMessage, gbc1);
-		jpWest1.add(jpHoaxes, BorderLayout.CENTER);
-		jpWest1.add(hoaxeslabel, BorderLayout.NORTH);
-
-		jpEast1 = new JPanel();
-		jpEast1.setLayout(new BorderLayout());
-		jpEast1.setMinimumSize(new Dimension(15,15));
-		jpEast1.add(nonUSleft, BorderLayout.WEST);
-		jpEast1.add(nonUSright, BorderLayout.EAST);
-		JPanel jpNUSM = new JPanel();
-		jpNUSM.setLayout(new GridBagLayout());
-        GridBagConstraints gbc2 = new GridBagConstraints();
-        jpNUSM.add(nonUSjtaMessage, gbc2);
-		jpEast1.add(jpNUSM, BorderLayout.CENTER);
-		jpEast1.add(nonUSlabel, BorderLayout.NORTH);
-		
-		jpWest2 = new JPanel();
-		jpWest2.setLayout(new BorderLayout());
-		jpWest2.add(likeliestleft, BorderLayout.WEST);
-		jpWest2.add(likeliestright, BorderLayout.EAST);
-		JPanel jpLS = new JPanel();
-		jpLS.setLayout(new GridBagLayout());
-        GridBagConstraints gbc3 = new GridBagConstraints();
-        jpLS.add(likeliestjtaMessage, gbc3);
-		jpWest2.add(jpLS, BorderLayout.CENTER);
-		jpWest2.add(likeliestlabel, BorderLayout.NORTH);
-
-		jpEast2 = new JPanel();
-		jpEast2.setLayout(new BorderLayout());
-		jpEast2.add(otherleft, BorderLayout.WEST);
-		jpEast2.add(otherright, BorderLayout.EAST);
-		jpEast2.add(otherjtaMessage, BorderLayout.CENTER);
-		jpEast2.add(otherlabel, BorderLayout.NORTH);
-
-		
-		PlaceHolder = new JTextArea(15,0);
-		PlaceHolder.setMaximumSize(new Dimension(15,0));
-		PlaceHolder.setEditable(false);
-		
-//		Message.setBackground(null);
-		jpWest1.setPreferredSize(new Dimension(375,250));
-		jpEast1.setPreferredSize(new Dimension(375,250));
-		jpNorth.setLayout(new BorderLayout());
-		jpNorth.add(jpWest1, BorderLayout.WEST);
-		jpNorth.add(jpEast1, BorderLayout.CENTER);
-		jpNorth.add(PlaceHolder, BorderLayout.EAST);
-	
-		
-		jpWest2.setPreferredSize(new Dimension(375,250));
-		jpEast2.setPreferredSize(new Dimension(375,250));
-		jpSouth.setLayout(new BorderLayout());
-		jpSouth.add(jpWest2, BorderLayout.WEST);
-		jpSouth.add(jpEast2, BorderLayout.CENTER);
-		jpNorth.add(PlaceHolder, BorderLayout.EAST);
+	public void initStats() throws NumberFormatException, Exception {
+		FourStatistics[0].resetDsiplayStats();
+		for (int i = 0; i < FourStatistics.length; i++) {
+			FourStatistics[i].initializeStat(Integer.parseInt(stats[i]));
+		}
 
 	}
 	
-	public void init(String from,String to) {
-		
-		statisticsModel.setPanels(nonUSjtaMessage, hoaxesjtaMessage, from, to);
-		statisticsModel.setlikely(likeliestjtaMessage, from, to);
-
-		
+	private void setDefaultFourPanels() {
+		for (int i = 0; i < FourStatistics.length; i++) {
+			stats[i] = i + 1 + "";
+		}
 	}
 	
-	public String getFrom() {
-		return from;
+	public void panelSave() {
+		String retString = "";
+		for (int i = 0; i < FourStatistics.length; i++) {
+			retString += FourStatistics[i].getStat() + " ";
+		}
+
+		try {
+			writeInFile = new BufferedWriter(new FileWriter(savePath));
+			writeInFile.write(retString);
+			writeInFile.flush();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 
-	public void setFrom(String from) {
-		this.from = from;
+	private void readFromFile() {
+		try {
+			readFromFile = new BufferedReader(new FileReader(savePath));
+			String line = readFromFile.readLine();
+			if (!line.isEmpty()) {
+				stats = line.split(" ");
+			} else {
+				System.out.println("I am getting here");
+				setDefaultFourPanels();
+			}
+		} catch (IOException e) {
+			setDefaultFourPanels();
+		}
 	}
+	
+	public void update(String from, String to) {
 
-	public String getTo() {
-		return to;
+		from = from + "-01-01 00:00:00";
+		to = to + "-12-31 00:00:00";
+
+		statisticsModel.setHoaxes(from, to);
+		statisticsModel.setNonUS(from, to);
+		statisticsModel.setLikely(from, to);
+		statisticsModel.setShape(from, to);
+		statisticsModel.likeliestCity(from, to);
+		statisticsModel.getMostLikelyTime(from, to);
+		
+		try {
+			StatisticsModel.getHTML();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		for (int i = 0; i < FourStatistics.length; i++) {
+			try {
+				FourStatistics[i].updateStatistic(FourStatistics[i].getStat());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
-
-	public void setTo(String to) {
-		this.to = to;
-	}
-
 }

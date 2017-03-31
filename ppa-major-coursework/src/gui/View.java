@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
@@ -24,12 +25,15 @@ import controller.RightListener;
 import map.MapCanvas;
 import map.MapPanel;
 import statistics.StatisticsGui;
+import surpise_panel.view.Game;
 
 
 public class View extends JFrame implements Observer {
 	
 	JComboBox<String> jcbFrom;
 	JComboBox<String> jcbTo;
+	
+	JButton jbGrab;
 	
 	JLabel jlFrom;
 	JLabel jlTo;
@@ -48,32 +52,37 @@ public class View extends JFrame implements Observer {
 	WelcomePanel welcome;
 	StatisticsGui stat;
 	MapPanel map;
+	Game game;
 
+	//ArrayList<Object> panelList = new ArrayList<Object>();
 	ArrayList<JPanel> panelList = new ArrayList<JPanel>();
 	JPanel currentPanel;
+	Game currentCanvas;
 	int index;
 	
-	Ripley ripley;
-
-	//Controller controller;
+	String fromm;
+	String too;
 	
+	Ripley ripley;
 	
 	public View() {
 		
 		super();
 		
-		//this.controller = controller;
-		
 		ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+
 		//need to set some sort of layout manager
 		setMinimumSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
+
 		
         welcome = new WelcomePanel();
+        
+        stat = new StatisticsGui(ripley);
 		
 		model = new Model();
 		model.addObserver(this);
@@ -143,7 +152,9 @@ public class View extends JFrame implements Observer {
 		jpCombBox.add(jlTo);
 		jpCombBox.add(jcbTo);
 		
-		JButton jbGrab = new JButton("Grab Data");
+		
+		jbGrab = new JButton("Grab Data");
+
 		jpCombBox.add(jbGrab);
 		jbGrab.addActionListener(grabListener);
 		
@@ -181,12 +192,12 @@ public class View extends JFrame implements Observer {
 		this.add(jpCenter, BorderLayout.CENTER);
 		this.add(jpBottom, BorderLayout.SOUTH);
 		
-		stat = new StatisticsGui(getJcbFrom(), getJcbTo(), ripley);
+
 		
 		panelList.add(welcome);
 		panelList.add(stat);
 		panelList.add(map);
-		panelList.add(test3);
+		//panelList.add(game);
 		
 	}
 	
@@ -220,15 +231,25 @@ public class View extends JFrame implements Observer {
 		
 		System.out.println("hello");
 		welcome.grabData(from, to);
+
 		map.setCanvas(new MapCanvas(ripley, from, to));
-		stat.init(getJcbFrom(), getJcbTo());
+		
+		fromm = getJcbFrom();
+		too = getJcbTo();
+
+		map.setCanvas(new MapCanvas(ripley, from, to));
+
+		stat.update(from,to);
+
+		//game.update(from,to);
+
 		
 	}
-	
+
 	public void update(Observable arg0, Object arg1) {
 		
 		Model model = (Model) arg0;
-		
+
 		if (arg1.equals("Grab Data")) {
 			
 			updateWelcomePanel(getJcbFrom(), getJcbTo());
@@ -248,88 +269,83 @@ public class View extends JFrame implements Observer {
 			
 		}
 
-
+//######### LEFT BUTTON CLICKED #########
 		if (arg1.equals("Left")) {
-			
+			removeCorrectState();
 			if (index == 0) {
-				
 				index = 3;
-				jpCenter.remove(currentPanel);
-				currentPanel = panelList.get(index);
-				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				jpCenter.revalidate();
-				jpCenter.repaint();
-				
+				addGame();
 			} else if (index > 0) {
-				
-				System.out.println("Left clicked");
-				
 				--index;
-				jpCenter.remove(currentPanel);
-				currentPanel = panelList.get(index);
-				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				jpCenter.revalidate();
-				jpCenter.repaint();
-				if (index == 2 || index == 1) { //invoked if going to/from map
-					pack();
-					setLocationRelativeTo(null);
-				}
-				
-			}
 
+				if(index == 3) addGame();
+				else addPanel();
+			}
 		}
 		
-		if (arg1.equals("Right")) {
-			
-			if (index == 3) {
-				
-				index = 0;
-				jpCenter.remove(currentPanel);
-				currentPanel = panelList.get(index);
-				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				jpCenter.revalidate();
-				jpCenter.repaint();
-				
-			} else {
-				
-                System.out.println("Right clicked");
-				
-				jpCenter.remove(currentPanel);
-				index++;
-				currentPanel = panelList.get(index);
-				jpCenter.add(currentPanel, BorderLayout.CENTER);
-				jpCenter.revalidate();
-				jpCenter.repaint();
-				if (index == 2 || index == 3) { //invoked if going to/from map
-					pack();
-					setLocationRelativeTo(null);
-				}
-				
-			}
-
-		}	
+//######### ENABLE / DISABLE LEFT + RIGHT BUTTONS ########
+		if (getJcbFrom().equals(fromm) && getJcbTo().equals(too)) jbGrab.setEnabled(false);
+		else jbGrab.setEnabled(true);
 		
+//######### RIGHT BUTTON CLICKED #########
+		if (arg1.equals("Right")) {
+			removeCorrectState();
+			if (index == 3) {
+				index = 0;
+				addPanel();
+			} else {
+				index++;
+				if(index == 3) addGame();
+				else addPanel();
+			}
+		}	
 	}
 	
-	/*public static void main (String[] args) {	
+	private void addGame() {
+		currentPanel = null;
 		
-		Model model = new Model();
-		
-		Controller controller = new Controller(model);
-		
-		View view = new View(controller);
-		
-		WelcomePanel welcome = new WelcomePanel();
-		
-		model.addObserver(view);
-		model.addObserver((Observer) welcome); 
-		
-		view.display();
-		
-		
-		//Ripley ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
-		//System.out.println(ripley.getLastUpdated());
-	}*/
-
+		// add loading label
+//		JLabel loadingLabel = new JLabel();
+//		loadingLabel.setText("Loading Space Invaders...");
+//		jpCenter.add(loadingLabel, BorderLayout.CENTER);
+//		jpCenter.revalidate();
+//		jpCenter.repaint();
+//		System.out.println("should have updated center panel");
+//		
+//		try {
+//			Thread.sleep(2000);
+//		} catch(Exception e){}
+//		System.out.println("not sleeping");
+		game = new Game(fromm, too);
+		this.remove(jpCenter);
+		this.setSize(new Dimension(800, 600));
+		currentCanvas = game;
+		this.add(currentCanvas, BorderLayout.CENTER);
+		this.revalidate();
+		this.repaint();
+		game.start();
+	}
 	
+	private void addPanel(){
+		currentPanel = panelList.get(index);
+		jpCenter.add(currentPanel, BorderLayout.CENTER);
+		jpCenter.revalidate();
+		jpCenter.repaint();
+		if (index == 2) {
+			this.setSize(new Dimension(930, 695));
+		}else {
+			this.setSize(new Dimension(800, 600));
+		}
+	}
+	
+	private void removeCorrectState() {
+		if(currentPanel != null){
+			jpCenter.remove(currentPanel);
+			System.out.println("removed current panel");
+		} else {
+			currentCanvas.stop();
+			this.remove(currentCanvas);
+			this.add(jpCenter, BorderLayout.CENTER);
+		}
+	}
 }
