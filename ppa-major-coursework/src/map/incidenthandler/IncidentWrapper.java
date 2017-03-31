@@ -63,7 +63,8 @@ public class IncidentWrapper {
 	//override toString!!
 	@Override
 	public String toString() {
-		return incident.toString(); //change this
+		return ("Time: " + getDateAndTime() + " City: " + getCity() + " Shape: " + getShape() 
+		+ " Duration: " + getDuration() + " Posted: " + getPosted());
 	}
 	
 	

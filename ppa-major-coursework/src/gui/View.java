@@ -71,10 +71,12 @@ public class View extends JFrame implements Observer {
 		
 		ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
 		
+		System.out.println(ripley.getAcknowledgementString());
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 
-		//need to set some sort of layout manager
+		
 		setMinimumSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
@@ -348,6 +350,7 @@ public class View extends JFrame implements Observer {
 		} else {
 			currentCanvas.stop();
 			this.remove(currentCanvas);
+			currentCanvas = null;
 			this.add(jpCenter, BorderLayout.CENTER);
 		}
 	}
