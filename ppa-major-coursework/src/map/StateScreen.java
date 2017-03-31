@@ -43,7 +43,7 @@ public class StateScreen extends JFrame {
 		JPanel dropDownPanel = new JPanel(new BorderLayout());
 		dropDownPanel.setMinimumSize(new Dimension(400, 100));
 		
-		String[] options = {"–", "Date", "City", "Shape", "Duration", "Posted"};
+		String[] options = {"-", "Date", "City", "Shape", "Duration", "Posted"};
 		selectAttribute = new JComboBox(options);
 		
 		dropDownPanel.add(selectAttribute, BorderLayout.CENTER);
