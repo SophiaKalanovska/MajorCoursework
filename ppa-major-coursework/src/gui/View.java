@@ -323,6 +323,7 @@ public class View extends JFrame implements Observer {
 		this.add(currentCanvas, BorderLayout.CENTER);
 		this.revalidate();
 		this.repaint();
+		setLocationRelativeTo(null); //just centring the frame when it resizes
 		game.start();
 	}
 	
@@ -332,10 +333,12 @@ public class View extends JFrame implements Observer {
 		jpCenter.revalidate();
 		jpCenter.repaint();
 		if (index == 2) {
-			this.setSize(new Dimension(930, 695));
+			//this.setSize(new Dimension(930, 695));
+			pack();
 		}else {
 			this.setSize(new Dimension(800, 600));
 		}
+		setLocationRelativeTo(null); //centre
 	}
 	
 	private void removeCorrectState() {

@@ -57,6 +57,10 @@ public class AlienIconManager {
 		}
 	}
 	
+	public ArrayList<Incident> getIncidents() {
+		return incidents;
+	}
+	
 	private ArrayList<String> getPossibleStates() {
 		ArrayList<String> states = new ArrayList<>();
 		states.add("AZ");

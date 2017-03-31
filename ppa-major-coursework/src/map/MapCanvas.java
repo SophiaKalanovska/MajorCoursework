@@ -40,7 +40,7 @@ public class MapCanvas extends JSVGCanvas {
 		for (int i=0; i<pins.length; i++) {
 			if (pins[i] != null) {
 				add(pins[i]);
-				pins[i].addMouseListener(new PinClickListener());
+				pins[i].addMouseListener(new PinClickListener(pinGenerator.getIncidents()));
 			}
 		}
 	}
