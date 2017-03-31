@@ -130,6 +130,9 @@ public class AlienIconManager {
 			Entry<String, Integer> current = allEntries.next();
 			String state = current.getKey();
 			double relSize = (current.getValue()*1.0) / totalIncidents; //force double
+			if (relSize > 0.1) {
+				relSize = 0.1;
+			}
 			boolean includeOnMap = isPossibleState(state);
 			if (((int) (relSize*300.0) != 0) && includeOnMap) {
 				icons[i] = new AlienPin(state);
