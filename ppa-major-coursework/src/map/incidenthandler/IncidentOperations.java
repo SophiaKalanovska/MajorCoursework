@@ -112,9 +112,11 @@ public class IncidentOperations {
 		IncidentWrapper[] localIncidents = new IncidentWrapper[incidents.length]; //upper bound
 		int j=0;
 		for (int i=0; i<incidents.length; i++) {
-			if (incidents[i] != null && incidents[i].getState().equals(state)) {
-				localIncidents[j] = incidents[i];
-				j++;
+			if (incidents[i] != null) {
+				if (incidents[i].getState().equals(state)) {
+					localIncidents[j] = incidents[i];
+					j++;
+				}
 			}
 		}
 		return trim(localIncidents);

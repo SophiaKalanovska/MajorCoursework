@@ -61,6 +61,7 @@ public class IncidentWrapper {
 	}
 	
 	//override toString!!
+	@Override
 	public String toString() {
 		return incident.toString(); //change this
 	}

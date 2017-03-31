@@ -13,11 +13,8 @@ public class PinClickListener extends MouseAdapter {
 	
 	public PinClickListener(ArrayList<Incident> incidents) {
 		this.incidents = new IncidentWrapper[incidents.size()];
-		int i=0;
-		for (Incident incident : incidents) {
-			if (incident != null) {
-				this.incidents[i] = new IncidentWrapper(incident);
-			}
+		for (int i=0; i<incidents.size(); i++) {
+			this.incidents[i] = new IncidentWrapper(incidents.get(i));
 		}
 	}
 	
