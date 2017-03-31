@@ -150,8 +150,8 @@ public class SingleStatistic extends JLabel {
 			centerLabel.setText("");
 		} else if (i == 8) {
 			statisticNumber = 8;
-			topLabel.setText("Arthur");
-			centerLabel.setText("");
+			topLabel.setText("Likeliest City");
+			centerLabel.setText(statisticsModel.getCurrentCity());
 
 		}
 		repaint();
