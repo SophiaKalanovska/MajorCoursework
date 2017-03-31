@@ -57,6 +57,10 @@ public class AlienIconManager {
 		}
 	}
 	
+	public ArrayList<Incident> getIncidents() {
+		return incidents;
+	}
+	
 	private ArrayList<String> getPossibleStates() {
 		ArrayList<String> states = new ArrayList<>();
 		states.add("AZ");
@@ -118,8 +122,8 @@ public class AlienIconManager {
 		return states;
 	}
 	
-	public JLabel[] getAllPins() {
-		JLabel[] icons = new JLabel[incidentsByState.entrySet().size()];
+	public AlienPin[] getAllPins() {
+		AlienPin[] icons = new AlienPin[incidentsByState.entrySet().size()];
 		Iterator<Entry<String,Integer>> allEntries = incidentsByState.entrySet().iterator();
 		int i=0;
 		while (allEntries.hasNext()) {
@@ -128,7 +132,7 @@ public class AlienIconManager {
 			double relSize = (current.getValue()*1.0) / totalIncidents; //force double
 			boolean includeOnMap = isPossibleState(state);
 			if (((int) (relSize*300.0) != 0) && includeOnMap) {
-				icons[i] = new JLabel();
+				icons[i] = new AlienPin(state);
 				setSizeLocation(icons[i], state, relSize);
 				i++;
 			}

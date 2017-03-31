@@ -36,7 +36,7 @@ public class MapPanel extends JPanel {
 	
 	public void setCanvas(MapCanvas canvas) {
 		if (myCanvas != null) {
-			this.remove(myCanvas);
+			remove(myCanvas);
 		}
 		myCanvas = canvas;
 		add(myCanvas, BorderLayout.CENTER);
@@ -55,7 +55,7 @@ public class MapPanel extends JPanel {
 		return myCanvas;
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		JFrame newFrame = new JFrame("Map");
 		Ripley ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
 		MapPanel mp = new MapPanel(ripley, "1960", "1990");
@@ -68,6 +68,6 @@ public class MapPanel extends JPanel {
 		for (int i=0; i<incidents.size(); i++) {
 			System.out.println(incidents.get(i).getState());
 		}
-	}
+	}*/
 
 }

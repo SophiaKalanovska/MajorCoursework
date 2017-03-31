@@ -34,6 +34,8 @@ public class StatisticsModel {
 	private String like;
 	private String likeshape;
 	private ArrayList<String> shape;
+	private int longestDuration;
+	
 	
 	private String currentCity;
 	// private Search search;
@@ -61,7 +63,6 @@ public class StatisticsModel {
 				}
 
 			}
-			System.out.println("number of hoaxes is" + numberOfHoax);
 		}
 	}
 
@@ -105,7 +106,26 @@ public class StatisticsModel {
 			}
 		}
 	
-
+	public void setLongestDuration(String from, String to) {
+		
+		ArrayList<String> duration = new ArrayList<String>();
+		for (int i = 0; i<data.size(); i++) {
+			Pattern num = Pattern.compile("/d*");
+			Matcher matcher = num.matcher(data.get(i).getDuration());
+			if (matcher.matches()) {
+				int durationCurrent = Integer.parseInt(matcher.group(1));
+				if (durationCurrent>longestDuration) {
+					longestDuration = durationCurrent;
+				}
+			}
+		}
+		
+	}
+	
+	public int getLongestDuration() {
+		return longestDuration;
+	}
+	
 	public void setShape(String from, String to) {
 		if (from != null && to != null) {
 			data = ripley.getIncidentsInRange(from, to);
@@ -403,5 +423,7 @@ public class StatisticsModel {
 		return currentCity;
 		
 	}
+	
+	
 
 }

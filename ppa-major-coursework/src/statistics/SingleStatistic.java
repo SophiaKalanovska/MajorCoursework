@@ -134,7 +134,7 @@ public class SingleStatistic extends JLabel {
 		} else if (i == 4) {
 			statisticNumber = 4;
 			topLabel.setText("Youtube Videos published within past week");
-			centerLabel.setText(StatisticsModel.getTotalResults());
+			centerLabel.setText(statisticsModel.getLongestDuration() + "");
 		} else if (i == 5) {
 			statisticNumber = 5;
 			topLabel.setText("Most common shape");
@@ -146,12 +146,12 @@ public class SingleStatistic extends JLabel {
 			centerLabel.setText(statisticsModel.getMostLikelySightingTimeFrame());
 		} else if (i == 7) {
 			statisticNumber = 7;
-			topLabel.setText("Nathan");
-			centerLabel.setText("");
+			topLabel.setText("Longest Sighting");
+			//centerLabel.setText(statisticsModel);
 		} else if (i == 8) {
 			statisticNumber = 8;
-			topLabel.setText("Arthur");
-			centerLabel.setText("");
+			topLabel.setText("Likeliest City");
+			centerLabel.setText(statisticsModel.getCurrentCity());
 
 		}
 		repaint();

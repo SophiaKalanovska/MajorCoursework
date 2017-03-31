@@ -113,6 +113,7 @@ public class StatisticsGui extends JPanel {
 		statisticsModel.setNonUS(from, to);
 		statisticsModel.setLikely(from, to);
 		statisticsModel.setShape(from, to);
+		statisticsModel.setLongestDuration(from, to);
 		statisticsModel.likeliestCity(from, to);
 		statisticsModel.getMostLikelyTime(from, to);
 		

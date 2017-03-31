@@ -65,24 +65,19 @@ public class View extends JFrame implements Observer {
 	
 	Ripley ripley;
 	
-	
-
-	//Controller controller;
-	
-	
 	public View() {
 		
 		super();
 		
-		//this.controller = controller;
-		
 		ripley = new Ripley("10tLI3GUsNqyVD6ql2OMtA==", "tBgm4pVq9ArVqL46EnH7ew==");
+		
+		System.out.println(ripley.getAcknowledgementString());
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 
-		//need to set some sort of layout manager
-		setPreferredSize(new Dimension(800, 600));
+		
+		setMinimumSize(new Dimension(800, 600));
 		pack();
 		setLocationRelativeTo(null);
 
@@ -96,7 +91,6 @@ public class View extends JFrame implements Observer {
 		
 		index = 0;
 		map = new MapPanel(ripley);
-		//game = new Game(ripley);
 		initWidgets();
 		
 	}
@@ -285,6 +279,7 @@ public class View extends JFrame implements Observer {
 				addGame();
 			} else if (index > 0) {
 				--index;
+
 				if(index == 3) addGame();
 				else addPanel();
 			}
@@ -310,12 +305,27 @@ public class View extends JFrame implements Observer {
 	
 	private void addGame() {
 		currentPanel = null;
-		this.remove(jpCenter);
+		
+		// add loading label
+//		JLabel loadingLabel = new JLabel();
+//		loadingLabel.setText("Loading Space Invaders...");
+//		jpCenter.add(loadingLabel, BorderLayout.CENTER);
+//		jpCenter.revalidate();
+//		jpCenter.repaint();
+//		System.out.println("should have updated center panel");
+//		
+//		try {
+//			Thread.sleep(2000);
+//		} catch(Exception e){}
+//		System.out.println("not sleeping");
 		game = new Game(fromm, too);
+		this.remove(jpCenter);
+		this.setSize(new Dimension(800, 600));
 		currentCanvas = game;
 		this.add(currentCanvas, BorderLayout.CENTER);
 		this.revalidate();
 		this.repaint();
+		setLocationRelativeTo(null); //just centring the frame when it resizes
 		game.start();
 	}
 	
@@ -325,16 +335,22 @@ public class View extends JFrame implements Observer {
 		jpCenter.revalidate();
 		jpCenter.repaint();
 		if (index == 2) {
-			this.setSize(new Dimension(930, 695));
+			//this.setSize(new Dimension(930, 695));
+			pack();
+		}else {
+			this.setSize(new Dimension(800, 600));
 		}
+		setLocationRelativeTo(null); //centre
 	}
 	
 	private void removeCorrectState() {
 		if(currentPanel != null){
 			jpCenter.remove(currentPanel);
+			System.out.println("removed current panel");
 		} else {
 			currentCanvas.stop();
 			this.remove(currentCanvas);
+			currentCanvas = null;
 			this.add(jpCenter, BorderLayout.CENTER);
 		}
 	}
